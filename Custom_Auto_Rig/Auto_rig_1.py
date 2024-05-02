@@ -4,6 +4,7 @@ import math
 import os
 import sys
 
+
 # Add the directory containing your module to the Python path (before importing it)
 module_dir = os.path.abspath('O:/Onedrive/Python_Blender/blend_auto_rig/Custom_Auto_Rig')
 sys.path.insert(0, module_dir)
@@ -11,15 +12,14 @@ sys.path.insert(0, module_dir)
 # Now you can import your module as usual
 from rig_func import Rigging_Functions
 
-# initialize the methods
+# initialize the Class
 r = Rigging_Functions()
 
 rig = 'Female Transfer Rig'
-import inspect
 
-inspect.getfullargspec(r.set_mode)
+# inspect.getfullargspec(r.set_mode)
 
-r.set_mode('EDIT')
+r.set_mode('OBJECT')
 r.remove_object_selection()
 r.remove_edit_and_arm_selection(rig)
 
@@ -68,7 +68,7 @@ for item in toe_rotation_to_duplicate:
         new_name = item[:-3] + 'Rotation_R'
         r_pos_1, r_pos_2 = r.bone_global_locations(rig, item)
         the_roll = r.bone_roll(rig, item)
-        r.new_bone_creation(r_pos_1, r_pos_2, new_name, rig, 'toes_L', False, the_roll)
+        r.new_bone_creation(r_pos_1, r_pos_2, new_name, rig, 'toes_R', False, the_roll)
         r.renamer(rig, new_name, new_name.replace('_', '', 1))
 
 close_toes_L = ['bigToe_1_L', 'indexToe_1_L', 'ringToe_1_L', 'pinkyToe_1_L', 'midToe_1_L']        
@@ -249,14 +249,14 @@ r.lock_scale(rig, 'heelPosition_R', x=True, y=True, z=True)
 
 # 35-38
 r.transformation(rig, 'heelHeight_L', from_max_y=1, to_max_y=-1, map_from='LOCATION',map_to_y_from="Y", subtarget='heelPosition_L', target=rig,use_motion_extrapolate=True, owner_space="LOCAL", target_space='LOCAL')
-r.copy_location(rig, 'toesIK_L', subtarget='heelHeight_L')
-r.copy_rotation(rig, 'toes_L', subtarget='toesIK_L')
-r.copy_rotation(rig, 'footFK_L', subtarget='MCH_foot_L')
+r.copy_location(rig, 'toesIK_L', subtarget='heelHeight_L', use_x=True, use_y=True, use_z=True)
+r.copy_rotation(rig, 'toes_L', subtarget='toesIK_L', use_x=True, use_y=True, use_z=True)
+r.copy_rotation(rig, 'footFK_L', subtarget='MCH_foot_L', use_x=True, use_y=True, use_z=True)
 
 r.transformation(rig, 'heelHeight_R', from_max_y=1, to_max_y=-1, map_from='LOCATION',map_to_y_from="Y", subtarget='heelPosition_R', target=rig,use_motion_extrapolate=True, owner_space="LOCAL", target_space='LOCAL')
-r.copy_location(rig, 'toesIK_R', subtarget='heelHeight_R')
-r.copy_rotation(rig, 'toes_R', subtarget='toesIK_R')
-r.copy_rotation(rig, 'footFK_R', subtarget='MCH_foot_R')
+r.copy_location(rig, 'toesIK_R', subtarget='heelHeight_R', use_x=True, use_y=True, use_z=True)
+r.copy_rotation(rig, 'toes_R', subtarget='toesIK_R', use_x=True, use_y=True, use_z=True)
+r.copy_rotation(rig, 'footFK_R', subtarget='MCH_foot_R', use_x=True, use_y=True, use_z=True)
 
 roll_list = ['toesIK_L', 'toesIK_R', 'toes_L', 'toes_R', 'heelHeight_L', 'heelHeight_R', 'MCH_footRoll_1_L', 'MCH_footRoll_1_R', 'heelPosition_L', 'heelPosition_R','MCH_footRoll_2_L','MCH_footRoll_2_R','MCH_footRoll_3_L', 'MCH_footRoll_3_R']
 r.set_mode('OBJECT')
