@@ -7,8 +7,9 @@ class Rigging_Functions:
     def __init__(self):
         pass
 
-    def set_mode(self, a_mode):
-        self.bpy.ops.object.mode_set(mode=a_mode)
+    @staticmethod
+    def set_mode(a_mode):
+        bpy.ops.object.mode_set(mode=a_mode)
     
     def remove_object_selection(self):
         bpy.ops.object.select_all(action='DESELECT')
@@ -17,7 +18,6 @@ class Rigging_Functions:
         bpy.ops.object.mode_set(mode='OBJECT')
         self.remove_object_selection()
         self.object_selection(object)
-        #have an option to select the object first
         bpy.ops.object.transform_apply(scale=True)
 
     def select_bone_as_active_edit(rig_name, bone_name):
@@ -58,29 +58,29 @@ class Rigging_Functions:
         bone = bpy.context.active_object.pose.bones[bone_name]
         return bone
 
-    def remove_constraints(rig_name, bone_name):
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+    def remove_constraints(self, rig_name, bone_name):
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         for item in bone.constraints:
             bone.constraints.remove(item)
 
     def degree_to_radians(degrees):
         return math.radians(degrees)
 
-    def bone_roll(rig_name, bone_name):
-        remove_edit_and_arm_selection(rig_name)
-        set_mode('OBJECT')
-        remove_object_selection()
-        object_selection(rig_name)
-        set_mode('EDIT')
+    def bone_roll(self, rig_name, bone_name):
+        self.remove_edit_and_arm_selection(rig_name)
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
+        self.object_selection(rig_name)
+        self.set_mode('EDIT')
         arm = bpy.data.armatures[rig_name]
         bone = arm.edit_bones[bone_name]
         return bone.roll
 
-    def create_IK(rig_name, bone_name, chain_count, pole_angle, pole_subtarget, pole_target, subtarget, target):
-        set_mode('OBJECT')
-        remove_object_selection()
-        object_selection(rig_name)
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+    def create_IK(self, rig_name, bone_name, chain_count, pole_angle, pole_subtarget, pole_target, subtarget, target):
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
+        self.object_selection(rig_name)
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         copy = bone.constraints.new(type='IK')
         target = bpy.data.objects[rig_name]
         copy.chain_count = chain_count
@@ -90,8 +90,8 @@ class Rigging_Functions:
         copy.subtarget = subtarget
         copy.target = target
 
-    def limit_rotation(rig_name, bone_name, order='AUTO',max_x=0.0,min_x=0.0,max_y=0.0, min_y=0.0,max_z=0.0,min_z=0.0,limit_x=False, limit_y=False, limit_z=False,transform_limit=False, owner_space='WORLD', target_space='WORLD'):
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+    def limit_rotation(self, rig_name, bone_name, order='AUTO',max_x=0.0,min_x=0.0,max_y=0.0, min_y=0.0,max_z=0.0,min_z=0.0,limit_x=False, limit_y=False, limit_z=False,transform_limit=False, owner_space='WORLD', target_space='WORLD'):
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         limit = bone.constraints.new(type='LIMIT_ROTATION')
         ## you need to convert degrees to radians to get the correct value.
         limit.owner_space = owner_space
@@ -109,8 +109,8 @@ class Rigging_Functions:
         limit.use_transform_limit = transform_limit
 
         
-    def limit_location(rig_name, bone_name,max_x=0.0,min_x=0.0,max_y=0.0, min_y=0.0,max_z=0.0,min_z=0.0,limit_x=False, limit_y=False, limit_z=False,transform_limit=False, owner_space='WORLD', target_space='WORLD'):
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+    def limit_location(self, rig_name, bone_name,max_x=0.0,min_x=0.0,max_y=0.0, min_y=0.0,max_z=0.0,min_z=0.0,limit_x=False, limit_y=False, limit_z=False,transform_limit=False, owner_space='WORLD', target_space='WORLD'):
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         limit = bone.constraints.new(type='LIMIT_LOCATION')
         limit.owner_space = owner_space
         limit.target_space = target_space
@@ -125,8 +125,8 @@ class Rigging_Functions:
         limit.use_max_z = limit_z
         limit.use_transform_limit = transform_limit
 
-    def limit_scale(rig_name, bone_name,max_x=0.0,min_x=0.0,max_y=0.0, min_y=0.0,max_z=0.0,min_z=0.0,limit_x=False, limit_y=False, limit_z=False,transform_limit=False, owner_space='WORLD', target_space='WORLD'):
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+    def limit_scale(self, rig_name, bone_name,max_x=0.0,min_x=0.0,max_y=0.0, min_y=0.0,max_z=0.0,min_z=0.0,limit_x=False, limit_y=False, limit_z=False,transform_limit=False, owner_space='WORLD', target_space='WORLD'):
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         limit = bone.constraints.new(type='LIMIT_SCALE')
         limit.owner_space = owner_space
         limit.target_space = target_space
@@ -141,11 +141,11 @@ class Rigging_Functions:
         limit.use_max_z = limit_z
         limit.use_transform_limit = transform_limit
 
-    def copy_rotation(rig_name, bone_name, influence=1.0, euler_order='AUTO',invert_x=False,invert_y=False,invert_z=False,mix_mode='REPLACE',subtarget="",target='target',use_offset=False,use_x=False,use_y=False,use_z=False, target_space='WORLD', owner_space='WORLD'):
-        set_mode('OBJECT')
-        remove_object_selection()
-        object_selection(rig_name)
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+    def copy_rotation(self, rig_name, bone_name, influence=1.0, euler_order='AUTO',invert_x=False,invert_y=False,invert_z=False,mix_mode='REPLACE',subtarget="",target='target',use_offset=False,use_x=False,use_y=False,use_z=False, target_space='WORLD', owner_space='WORLD'):
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
+        self.object_selection(rig_name)
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         copy = bone.constraints.new(type='COPY_ROTATION')
         target = bpy.data.objects[rig_name]
         copy.owner_space = owner_space
@@ -163,8 +163,8 @@ class Rigging_Functions:
         copy.use_z = use_z
         copy.influence = influence
 
-    def copy_location(rig_name, bone_name, head_tail=0.0,invert_x=False, invert_y=False, invert_z=False, subtarget="",target='target',use_bbone_shape=False,use_offset=False,use_x=False,use_y=False,use_z=False,target_space='WORLD', owner_space='WORLD'):
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+    def copy_location(self, rig_name, bone_name, head_tail=0.0,invert_x=False, invert_y=False, invert_z=False, subtarget="",target='target',use_bbone_shape=False,use_offset=False,use_x=False,use_y=False,use_z=False,target_space='WORLD', owner_space='WORLD'):
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         copy = bone.constraints.new(type='COPY_LOCATION')
         target = bpy.data.objects[rig_name]
         copy.owner_space = owner_space
@@ -181,8 +181,8 @@ class Rigging_Functions:
         copy.use_y = use_y
         copy.use_z = use_z
         
-    def copy_scale(rig_name, bone_name, power=1.0,subtarget="",target='target',use_add=False,use_make_uniform=False,use_offset=False,use_x=False,use_y=False,use_z=False,target_space='WORLD', owner_space='WORLD'):
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+    def copy_scale(self, rig_name, bone_name, power=1.0,subtarget="",target='target',use_add=False,use_make_uniform=False,use_offset=False,use_x=False,use_y=False,use_z=False,target_space='WORLD', owner_space='WORLD'):
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         copy = bone.constraints.new(type='COPY_SCALE')
         target = bpy.data.objects[rig_name]
         copy.owner_space = owner_space
@@ -198,16 +198,16 @@ class Rigging_Functions:
         copy.use_z = use_z
 
 
-    def copy_transforms(rig_name, bone_name, influence, subtarget):
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+    def copy_transforms(self, rig_name, bone_name, influence, subtarget):
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         copy = bone.constraints.new(type='COPY_TRANSFORMS')
         target = bpy.data.objects[rig_name]
         copy.target = target
         copy.influence = influence
         copy.subtarget = subtarget
 
-    def damped_track(rig_name, bone_name, head_tail=0.0,subtarget="",target='target',track_axis='TRACK_X',use_bbone_shape=False):    
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+    def damped_track(self, rig_name, bone_name, head_tail=0.0,subtarget="",target='target',track_axis='TRACK_X',use_bbone_shape=False):    
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         copy = bone.constraints.new(type='DAMPED_TRACK')
         target = bpy.data.objects[rig_name]
         copy.head_tail = head_tail
@@ -217,6 +217,7 @@ class Rigging_Functions:
         copy.use_bbone_shape = use_bbone_shape
 
     def transformation(
+        self,
         rig_name,
         bone_name,
         from_max_x=0.0,
@@ -271,7 +272,7 @@ class Rigging_Functions:
         owner_space='WORLD',
         target_space='WORLD'
     ):
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         copy = bone.constraints.new(type="TRANSFORM")
         target = bpy.data.objects[rig_name]
         copy.owner_space = owner_space
@@ -327,6 +328,7 @@ class Rigging_Functions:
         copy.use_motion_extrapolate = use_motion_extrapolate
 
     def ik_properties(
+        self,
         rig_name,
         bone_name,
         lock_ik_x=False,
@@ -354,7 +356,7 @@ class Rigging_Functions:
         use_ik_linear_control=False,
         use_ik_rotation_control=False,
     ):
-        bone = select_bone_as_active_pose(rig_name, bone_name)
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
         bone.lock_ik_x = lock_ik_x
         bone.lock_ik_y = lock_ik_y
         bone.lock_ik_z = lock_ik_z
@@ -383,11 +385,11 @@ class Rigging_Functions:
         bone.use_ik_linear_control = use_ik_linear_control
         bone.use_ik_rotation_control = use_ik_rotation_control
 
-    def subdivide_bone(rig_name, bone_name, cut_amount):
-        select_bone_as_active_edit(rig_name, bone_name)
-        set_mode('OBJECT')
+    def subdivide_bone(self, rig_name, bone_name, cut_amount):
+        self.select_bone_as_active_edit(rig_name, bone_name)
+        self.set_mode('OBJECT')
         bpy.context.view_layer.objects.active = bpy.data.objects[rig_name]
-        set_mode('EDIT')
+        self.set_mode('EDIT')
         bpy.ops.armature.subdivide(number_cuts=(cut_amount, 20))
 
     def rig_bone_list(rig_name):
@@ -395,48 +397,48 @@ class Rigging_Functions:
         bone_names = [bone.name for bone in arm.bones]
         return bone_names
 
-    def create_root_bone(rig_name):
+    def create_root_bone(self, rig_name):
         bpy.ops.object.mode_set(mode='OBJECT')
-        remove_object_selection()
+        self.remove_object_selection()
         bpy.context.view_layer.objects.active = bpy.data.objects[rig_name]
         bpy.ops.object.mode_set(mode='EDIT')
-        remove_edit_and_arm_selection(rig_name)
+        self.remove_edit_and_arm_selection(rig_name)
         arm = bpy.data.armatures[rig_name]
         bone = arm.edit_bones.new("ROOT")
         bone.head = (0, 0, 0)  # Starting position
         bone.tail = (0, 0, 0.185127)  # Ending position
     
-    def parent_bone(rig_name, child_bone, parent_bone, offset):
-        set_mode('OBJECT')
-        remove_object_selection()
-        object_selection(rig_name)
-        set_mode('EDIT')
+    def parent_bone(self, rig_name, child_bone, parent_bone, offset):
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
+        self.object_selection(rig_name)
+        self.set_mode('EDIT')
         arm = bpy.data.armatures[rig_name]
         bone = arm.edit_bones[child_bone]
         bone.parent = arm.edit_bones[parent_bone]
         bone.use_connect = offset
         
-    def bone_length(bone_name, rig_name):
+    def bone_length(self, bone_name, rig_name):
         bpy.ops.object.mode_set(mode='OBJECT')
-        remove_object_selection()
-        object_selection(rig_name)
-        set_mode('EDIT')
+        self.remove_object_selection()
+        self.object_selection(rig_name)
+        self.set_mode('EDIT')
         arm = bpy.data.armatures[rig_name]
         bone = arm.edit_bones[bone_name]
         return bone.length
 
-    def change_bone_length(bone_name, rig_name, length):
-        set_mode('OBJECT')
-        remove_object_selection()
-        object_selection(rig_name)
-        set_mode('EDIT')
+    def change_bone_length(self, bone_name, rig_name, length):
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
+        self.object_selection(rig_name)
+        self.set_mode('EDIT')
         arm = bpy.data.armatures[rig_name]
         bone = arm.edit_bones[bone_name]
         bone.length = length
 
-    def lock_location(rig_name, bone_name, x=False, y=False, z=False):
-        set_mode('OBJECT')
-        remove_object_selection()
+    def lock_location(self, rig_name, bone_name, x=False, y=False, z=False):
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
         bpy.context.view_layer.objects.active = bpy.data.objects[rig_name]
         bpy.ops.object.mode_set(mode='POSE')
         bone = bpy.context.active_object.pose.bones[bone_name]
@@ -444,9 +446,9 @@ class Rigging_Functions:
         bone.lock_location[1] = y
         bone.lock_location[2] = z
         
-    def lock_rotation(rig_name, bone_name, w=False, x=False, y=False, z=False):
-        set_mode('OBJECT')
-        remove_object_selection()
+    def lock_rotation(self, rig_name, bone_name, w=False, x=False, y=False, z=False):
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
         bpy.context.view_layer.objects.active = bpy.data.objects[rig_name]
         bpy.ops.object.mode_set(mode='POSE')
         bone = bpy.context.active_object.pose.bones[bone_name]
@@ -460,9 +462,9 @@ class Rigging_Functions:
             bone.lock_rotation[1] = y
             bone.lock_rotation[2] = z
 
-    def lock_scale(rig_name, bone_name, x=False, y=False, z=False):
-        set_mode('OBJECT')
-        remove_object_selection()
+    def lock_scale(self, rig_name, bone_name, x=False, y=False, z=False):
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
         bpy.context.view_layer.objects.active = bpy.data.objects[rig_name]
         bpy.ops.object.mode_set(mode='POSE')
         bone = bpy.context.active_object.pose.bones[bone_name]
@@ -470,32 +472,32 @@ class Rigging_Functions:
         bone.lock_scale[1] = y
         bone.lock_scale[2] = z
 
-    def eular_change(rig_name, bone_name, rotation):
-        set_mode('OBJECT')
-        remove_object_selection()
-        object_selection(rig_name)
+    def eular_change(self, rig_name, bone_name, rotation):
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
+        self.object_selection(rig_name)
         bpy.ops.object.mode_set(mode='POSE')
         bone = bpy.context.active_object.pose.bones[bone_name]
         bone.rotation_mode = rotation
 
-    def renamer(rig_name, bone_name, new_bone_name):
-        set_mode('OBJECT')
-        remove_edit_and_arm_selection(rig_name)
-        set_mode('OBJECT')
-        remove_object_selection()
+    def renamer(self, rig_name, bone_name, new_bone_name):
+        self.set_mode('OBJECT')
+        self.remove_edit_and_arm_selection(rig_name)
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
         bones_list = bpy.data.armatures[rig_name].bones
         for item in bones_list:
             if item.name == bone_name:
                 print(item.name)
                 item.name = new_bone_name
-        remove_edit_and_arm_selection(rig_name)
+        self.remove_edit_and_arm_selection(rig_name)
 
     # duplicates bone
-    def duplicate_bone(rig_name, bone_name, new_bone_name):
-        remove_edit_and_arm_selection(rig_name)
-        set_mode('OBJECT')
-        object_selection(rig_name)
-        set_mode('EDIT')
+    def duplicate_bone(self, rig_name, bone_name, new_bone_name):
+        self.remove_edit_and_arm_selection(rig_name)
+        self.set_mode('OBJECT')
+        self.object_selection(rig_name)
+        self.set_mode('EDIT')
         arm = bpy.data.objects[rig_name]
         bone = arm.data.edit_bones[bone_name]
         bone.select=True
@@ -548,10 +550,10 @@ class Rigging_Functions:
         global_position_2 = selected_object.matrix_world.translation
         return global_position_1, global_position_2
 
-    def bone_global_locations(rig_name, bone_name):
-        set_mode('OBJECT')
-        remove_edit_and_arm_selection(rig_name)
-        object_selection(rig_name)
+    def bone_global_locations(self, rig_name, bone_name):
+        self.set_mode('OBJECT')
+        self.remove_edit_and_arm_selection(rig_name)
+        self.object_selection(rig_name)
         bpy.ops.object.mode_set(mode='POSE')
         arm = bpy.data.objects[rig_name]
         bone = arm.pose.bones[bone_name]
@@ -560,7 +562,7 @@ class Rigging_Functions:
         bone.bone.select = True
         head = bone.head
         tail = bone.tail
-        set_mode('EDIT')
+        self.set_mode('EDIT')
         # arm = bpy.data.armatures[rig_name]
         # bone = arm.edit_bones[bone_name]
         matrix_world_inv = arm.matrix_world.inverted()
@@ -596,14 +598,14 @@ class Rigging_Functions:
 
     # creates a bone at the position given, if you want to have it duplicate, pass in the 
     # global pos of the bone head and tail. pos_1 is heads.
-    def new_bone_creation_using_duplication(pos_1, pos_2, bone_name, new_bone_name, rig_name, parent, parent_offset, roll, keep_selection=True):
+    def new_bone_creation_using_duplication(self, pos_1, pos_2, bone_name, new_bone_name, rig_name, parent, parent_offset, roll, keep_selection=True):
         bpy.ops.object.mode_set(mode='OBJECT')
-        remove_object_selection()
+        self.remove_object_selection()
         bpy.context.view_layer.objects.active = bpy.data.objects[rig_name]
         bpy.ops.object.mode_set(mode='EDIT')
-        remove_edit_and_arm_selection(rig_name)
+        self.remove_edit_and_arm_selection(rig_name)
         # after here is the issue
-        select_bone_as_active_edit(rig_name, bone_name)
+        self.select_bone_as_active_edit(rig_name, bone_name)
         arm = bpy.data.armatures[rig_name]
         bone = arm.edit_bones.new(new_bone_name)
         bone.roll = roll
@@ -618,20 +620,20 @@ class Rigging_Functions:
         # Set the head and tail positions of the bone
         bone.head = pos_1  # Starting position
         bone.tail = pos_2  # Ending position
-        remove_edit_and_arm_selection(rig_name)
+        self.remove_edit_and_arm_selection(rig_name)
         if keep_selection == True:
             new_bone = bpy.context.visible_bones
             # print(new_bone[-1].name)
-            select_bone_as_active_edit(rig_name, new_bone[-1].name)
+            self.select_bone_as_active_edit(rig_name, new_bone[-1].name)
         else:
-            remove_edit_and_arm_selection(rig_name)
+            self.remove_edit_and_arm_selection(rig_name)
 
-    def new_bone_creation(pos_1, pos_2, new_bone_name, rig_name, parent, parent_offset, roll):
+    def new_bone_creation(self, pos_1, pos_2, new_bone_name, rig_name, parent, parent_offset, roll):
         bpy.ops.object.mode_set(mode='OBJECT')
-        remove_object_selection()
+        self.remove_object_selection()
         bpy.context.view_layer.objects.active = bpy.data.objects[rig_name]
         bpy.ops.object.mode_set(mode='EDIT')
-        remove_edit_and_arm_selection(rig_name)
+        self.remove_edit_and_arm_selection(rig_name)
         #here is the issue
         arm = bpy.data.armatures[rig_name]
         bone = arm.edit_bones.new(new_bone_name)
@@ -649,17 +651,17 @@ class Rigging_Functions:
             pass
             arm.edit_bones[new_bone_name].use_connect = parent_offset
             arm.edit_bones[new_bone_name].parent = arm.edit_bones[parent]
-        remove_edit_and_arm_selection(rig_name)
+        self.remove_edit_and_arm_selection(rig_name)
 
 
 
     #extrudes from a bone, oarameters to select which head to extrude from and the axis
-    def extrude_out(bone_name, new_bone_name, rig_name, head, tail, value, bone_length, roll):
+    def extrude_out(self, bone_name, new_bone_name, rig_name, head, tail, value, bone_length, roll):
         bpy.ops.object.mode_set(mode='OBJECT')
-        remove_object_selection()
+        self.remove_object_selection()
         bpy.context.view_layer.objects.active = bpy.data.objects[rig_name]
         bpy.ops.object.mode_set(mode='EDIT')
-        remove_edit_and_arm_selection(rig_name)
+        self.remove_edit_and_arm_selection(rig_name)
         arm = bpy.data.armatures[rig_name]
         bone = arm.edit_bones[bone_name]
         bone.select_head = head
@@ -669,24 +671,24 @@ class Rigging_Functions:
         new_bone = arm.edit_bones[new_bone_name]
         new_bone.length = bone_length
         new_bone.roll = roll
-        select_bone(new_bone_name, rig_name, True, True)
+        self.select_bone(new_bone_name, rig_name, True, True)
 
     # might just use my function duplicate_bone instead of this methof
-    def duplication_chain(rig_name, bone_name, new_bone_name, parent='', parent_offset = True, roll=0):
+    def duplication_chain(self, rig_name, bone_name, new_bone_name, parent='', parent_offset = True, roll=0):
         #get's bone's local heads and tails location
-        head_loc, tail_loc = get_bone_location(rig_name, bone_name)
+        head_loc, tail_loc = self.get_bone_location(rig_name, bone_name)
         #get's bone's world locations
-        head_global, tail_global = bone_global_location(head_loc, tail_loc)
+        head_global, tail_global = self.bone_global_location(head_loc, tail_loc)
         #duplicate bone and give it the same location of the bone_name parameter
-        new_bone_creation(head_global, tail_global, new_bone_name, rig_name, parent, parent_offset, roll) 
+        self.new_bone_creation(head_global, tail_global, new_bone_name, rig_name, parent, parent_offset, roll) 
 
-    def flip_bone(rig_name, bone_name):
-        set_mode('EDIT')
-        remove_edit_and_arm_selection(rig_name)
-        set_mode('OBJECT')
+    def flip_bone(self, rig_name, bone_name):
+        self.set_mode('EDIT')
+        self.remove_edit_and_arm_selection(rig_name)
+        self.set_mode('OBJECT')
         arm = bpy.data.armatures[rig_name]
         bpy.context.view_layer.objects.active = bpy.data.objects[rig_name]
-        set_mode('EDIT')
+        self.set_mode('EDIT')
         bone = arm.edit_bones[bone_name]
         arm.edit_bones.active = bone
         arm.edit_bones.active.select = True
@@ -694,11 +696,11 @@ class Rigging_Functions:
         bone.select_tail = True
         bpy.ops.armature.switch_direction()
 
-    def create_bone_collections(rig_name, bones_to_assign):
-        remove_edit_and_arm_selection(rig_name)
-        set_mode('OBJECT')
-        remove_object_selection()
-        object_selection(rig_name)
+    def create_bone_collections(self, rig_name, bones_to_assign):
+        self.remove_edit_and_arm_selection(rig_name)
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
+        self.object_selection(rig_name)
         arm = bpy.context.object.data
 
         for collection_name, value in bones_to_assign.items():
@@ -712,15 +714,15 @@ class Rigging_Functions:
     bones_to_assign = {'firstBones': ['Bone', 'Bone.001', 'Bone.002', 'Bone.003'], 'secondBones': ['Bone.004', 'Bone.005', 'Bone.006', 'Bone.007']}
 
 
-    def duplicate_bones(rig_name, bone_name, new_bone_name, parent, parent_offset, roll, keep_selection):
-        pos_1, pos_2 = bone_global_locations(rig_name, bone_name)
-        new_bone_creation_using_duplication(pos_1, pos_2, bone_name, new_bone_name, rig, parent, parent_offset, roll, keep_selection)
+    def duplicate_bones(self, rig_name, bone_name, new_bone_name, parent, parent_offset, roll, keep_selection):
+        pos_1, pos_2 = self.bone_global_locations(rig_name, bone_name)
+        self.new_bone_creation_using_duplication(pos_1, pos_2, bone_name, new_bone_name, rig, parent, parent_offset, roll, keep_selection)
 
-    def move_head_or_tail(bone_name, rig_name, head, tail, value_1, value_2):
-        set_mode('OBJECT')
-        remove_object_selection()
-        object_selection(rig_name)
-        set_mode('EDIT')
+    def move_head_or_tail(self, bone_name, rig_name, head, tail, value_1, value_2):
+        self.set_mode('OBJECT')
+        self.remove_object_selection()
+        self.object_selection(rig_name)
+        self.set_mode('EDIT')
         arm = bpy.data.armatures[rig_name]
         bone = arm.edit_bones[bone_name]
 

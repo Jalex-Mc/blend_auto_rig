@@ -6,4 +6,4 @@ class Test:
         pass
 
     def testing(self):
-        print('123')
+        return '123'
