@@ -21,10 +21,10 @@ rig = 'Female Transfer Rig'
 
 left_arm_bones = ['humerus_L', 'armTwist_1_L', 'forearm_L', 'armTwist_2_L', 'armTwist_3_L', 'hand_L']
 left_arm_FK_bones = ['humerus_FK_L', 'armTwist_FK_L', 'forearm_FK_L', 'armTwist_FK_L', 'armTwist_FK_L', 'hand_FK_L']
-left_arm_IK_bones = ['humerus_IK_L', 'armTwist_IK_L', 'forearm_IK_L', 'armTwist_IK_L', 'armTwist_IK_L', 'handIK_CTRL_L']
+left_arm_IK_bones = ['humerus_IK_L', 'armTwist_IK_L', 'forearm_IK_L', 'armTwist_IK_L', 'armTwist_IK_L', 'hand_IK_L']
 right_arm_bones = ['humerus_R', 'armTwist_1_R', 'forearm_R', 'armTwist_2_R', 'armTwist_3_R', 'hand_R']
 right_arm_FK_bones = ['humerus_FK_R', 'armTwist_FK_R', 'forearm_FK_R', 'armTwist_FK_R', 'armTwist_FK_R', 'hand_FK_R']
-right_arm_IK_bones = ['humerus_IK_R', 'armTwist_IK_R', 'forearm_IK_R', 'armTwist_IK_R', 'armTwist_IK_R', 'handIK_CTRL_R']
+right_arm_IK_bones = ['humerus_IK_R', 'armTwist_IK_R', 'forearm_IK_R', 'armTwist_IK_R', 'armTwist_IK_R', 'hand_IK_R']
 
 for index, item in enumerate(left_arm_bones):
     r.copy_transforms(rig, item, 1, left_arm_IK_bones[index])

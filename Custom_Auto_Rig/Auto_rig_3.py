@@ -23,7 +23,7 @@ pole_location, pole_global_location = r.object_location('elbowPoleEmpty_L')
 head = list(set(pole_location))
 tail = pole_location
 tail[1] += .1
-r.new_bone_creation(head, tail, 'elbowPole_L', rig, 'ROOT', False, 0)
+r.new_bone_creation(head, tail, 'elbowPole_L', rig, 'root', False, 0)
 head, tail = r.bone_global_locations(rig, 'elbowPole_L')
 head[1] += .16
 tail[1] += .16
@@ -33,7 +33,7 @@ pole_location, pole_global_location = r.object_location('elbowPoleEmpty_R')
 head = list(set(pole_location))
 tail = pole_location
 tail[1] += .1
-r.new_bone_creation(head, tail, 'elbowPole_R', rig, 'ROOT', False, 0)
+r.new_bone_creation(head, tail, 'elbowPole_R', rig, 'root', False, 0)
 head, tail = r.bone_global_locations(rig, 'elbowPole_R')
 head[1] += .16
 tail[1] += .16
@@ -396,7 +396,7 @@ number = ['1', '2', '3']
 
 for index, item in enumerate(left_arm_IK_bones):
     if 'hand' in item:
-        left_arm_IK_bones[index] = f"{item.split('_')[0]}_IK_CTRL_L"
+        left_arm_IK_bones[index] = f"{item.split('_')[0]}_IK_L"
     else:
         if any(bone in item for bone in number):
             left_arm_IK_bones[index] = f"{item.split('_', 2)[0]}_{(item.split('_', 1)[1])[:-1]}IK_L"
@@ -414,7 +414,7 @@ for index, item in enumerate(left_arm_FK_bones):
 
 for index, item in enumerate(right_arm_IK_bones):
     if 'hand' in item:
-        right_arm_IK_bones[index] = f"{item.split('_')[0]}_IK_CTRL_R"
+        right_arm_IK_bones[index] = f"{item.split('_')[0]}_IK_R"
     else:
         if any(bone in item for bone in number):
             right_arm_IK_bones[index] = f"{item.split('_', 2)[0]}_{(item.split('_', 1)[1])[:-1]}IK_R"
@@ -457,8 +457,8 @@ for index, item in enumerate(left_arm_bones):
     arm = bpy.data.objects[rig]
     parent = arm.data.bones[item].parent.name
     r.duplicate_bones(rig, item, left_arm_IK_bones[index], parent, False, forearm_roll, False)
-hand_ctrl_length = r.bone_length('hand_IK_CTRL_L', rig) * 2
-r.change_bone_length('hand_IK_CTRL_L', rig, hand_ctrl_length)
+hand_ctrl_length = r.bone_length('hand_IK_L', rig) * 2
+r.change_bone_length('hand_IK_L', rig, hand_ctrl_length)
 
 
 
@@ -479,8 +479,8 @@ for index, item in enumerate(right_arm_bones):
     arm = bpy.data.objects[rig]
     parent = arm.data.bones[item].parent.name
     r.duplicate_bones(rig, item, right_arm_IK_bones[index], parent, False, forearm_roll, False)
-hand_ctrl_length = r.bone_length('hand_IK_CTRL_R', rig) * 2
-r.change_bone_length('hand_IK_CTRL_R', rig, hand_ctrl_length)
+hand_ctrl_length = r.bone_length('hand_IK_R', rig) * 2
+r.change_bone_length('hand_IK_R', rig, hand_ctrl_length)
 
 for index, item in enumerate(right_arm_bones):
     forearm_roll = r.bone_roll(rig, right_arm_bones[index])
@@ -492,8 +492,8 @@ r.remove_edit_and_arm_selection(rig)
 r.set_mode('OBJECT')
 r.remove_object_selection()
 
-r.copy_rotation(rig, 'hand_L', subtarget='hand_IK_CTRL_L')
-r.copy_rotation(rig, 'hand_R', subtarget='hand_IK_CTRL_R')
+r.copy_rotation(rig, 'hand_L', subtarget='hand_IK_L')
+r.copy_rotation(rig, 'hand_R', subtarget='hand_IK_R')
 
 r.parent_bone(rig, 'forearm_IK_L', 'humerus_IK_L', True)
 r.parent_bone(rig, 'forearm_IK_R', 'humerus_IK_R', True)
@@ -501,8 +501,8 @@ r.parent_bone(rig, 'forearm_FK_L', 'humerus_FK_L', True)
 r.parent_bone(rig, 'forearm_FK_R', 'humerus_FK_R', True)
 
 
-r.create_IK(rig, 'forearm_IK_L', 2, r.degree_to_radians(-80), 'elbowPole_L', rig, 'handIK_CTRL_L', rig)
-r.create_IK(rig, 'forearm_IK_R', 2, r.degree_to_radians(-80), 'elbowPole_R', rig, 'handIK_CTRL_R', rig)
+r.create_IK(rig, 'forearm_IK_L', 2, r.degree_to_radians(-80), 'elbowPole_L', rig, 'handIK_L', rig)
+r.create_IK(rig, 'forearm_IK_R', 2, r.degree_to_radians(-80), 'elbowPole_R', rig, 'handIK_R', rig)
 
 
 print(left_arm_bones)

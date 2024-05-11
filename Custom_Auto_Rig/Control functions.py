@@ -2,6 +2,7 @@ import bpy
 from mathutils import Vector, Matrix
 import bmesh
 import json
+import pickle
 
 scene = bpy.context.scene
 
@@ -40,6 +41,7 @@ def points_list(obj):
 
 def get_list_of_objs_in_coll(coll_name):
     # Get the collection by name
+    collection_of_objects = []
     collection_name = coll_name  # Change this to your collection name
     collection = bpy.data.collections.get(collection_name)
 
@@ -49,11 +51,11 @@ def get_list_of_objs_in_coll(coll_name):
         
         # Print the names of all objects in the collection
         for obj in objects_in_collection:
-            print(obj.name)
+            collection_of_objects.append(obj.name)
     else:
         print("Collection not found.")
 
-    return objects_in_collection
+    return collection_of_objects
 
 def distance_between_points(first_obj_locs, final_obj_locs):
     first_points_loc = points_list(first_obj_locs)
@@ -104,36 +106,28 @@ def move_vertices(list):
 
 ################## get first points location ####################
 
-og_points_list = points_list('Cube')
+## code to get the end points. 
 
-################## get second points location ####################
+mesh_list = get_list_of_objs_in_coll('CTRLS')
 
-second_points_list = points_list('test')
+a_list = []
 
-################## get distance ####################
+for obj in mesh_list:
+    points = []
+    for point in points_list(obj):
+        points.append(tuple(point))
+    a_list.append(points)
 
-distance_between_points = []
+with open('O:\\Onedrive\\Python_Blender\\blend_auto_rig\\Custom_Auto_Rig\\end_points.txt', 'w') as file:
+        # file.write(json.dumps(a_list))
+        json.dump(a_list, file, ensure_ascii=False)
+        print('finished!')
 
-for index, vert in enumerate(og_points_list):
-    distance_between_points.append(second_points_list[index] - vert)
+## getting the end points to use on transfer rig
 
-print(distance_between_points) 
+with open('O:\\Onedrive\\Python_Blender\\blend_auto_rig\\Custom_Auto_Rig\\end_points.txt', 'r') as file:
+    end_points = json.load(file)
 
-################## get distance ####################
+## it has all 128 objects, so [0] will be the first object in the collection and [127] will be the last.
+# print(len(end_points))
 
-obj = clean_select('Cube for test')
-mesh = bpy.context.view_layer.objects.active.data
-bpy.ops.object.mode_set(mode='EDIT')
-
-if obj.mode == 'EDIT':
-    bpy.ops.object.mode_set(mode='OBJECT')
-   # Get the selected vertices
-    selected_verts = [v.co for v in obj.data.vertices if v.select]
-
-   # Move the selected vertices
-    for index, vert in enumerate(selected_verts):
-        print('working')
-       # You can adjust the movement by changing these values
-        vert.x += distance_between_points[index].x
-        vert.y += distance_between_points[index].y
-        vert.z += distance_between_points[index].z

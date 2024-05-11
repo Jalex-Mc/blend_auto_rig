@@ -24,7 +24,7 @@ r.remove_object_selection()
 r.remove_edit_and_arm_selection(rig)
 
 r.create_root_bone(rig) #4
-r.parent_bone(rig, 'pelvis', 'ROOT', False)
+r.parent_bone(rig, 'pelvis', 'root', False)
 
 ##################################
 ##################################
@@ -125,8 +125,8 @@ right_foot_tip_empty_location, right_foot_tip_empty_world = r.object_location('f
 right_foot_end_empty_location, right_foot_end_empty_world = r.object_location('footEnd_Empty_R')
 right_Knee_empty_location, right_Knee_empty_world = r.object_location('knee_Empty_R')
 
-r.new_bone_creation(left_foot_tip_empty_location, left_foot_end_empty_location, 'footIK_L', rig, 'ROOT', False, 1.5708)
-r.new_bone_creation(right_foot_tip_empty_location, right_foot_end_empty_location, 'footIK_R', rig, 'ROOT', False, 1.5708)
+r.new_bone_creation(left_foot_tip_empty_location, left_foot_end_empty_location, 'footIK_L', rig, 'root', False, 1.5708)
+r.new_bone_creation(right_foot_tip_empty_location, right_foot_end_empty_location, 'footIK_R', rig, 'root', False, 1.5708)
 
 
 # 5 - 6
@@ -137,13 +137,13 @@ r.parent_bone(rig, 'footRollCTRL_R', 'footIK_R', False)
 
 # 7 - 8
 pos_1, pos_2 = r.bone_global_locations(rig, 'MCH_foot_L')
-r.new_bone_creation(pos_2, left_foot_end_empty_location, 'MCH_footRoll_1_L', rig, 'ROOT', False, 0)
+r.new_bone_creation(pos_2, left_foot_end_empty_location, 'MCH_footRoll_1_L', rig, 'root', False, 0)
 position_0 = left_foot_end_empty_location[0]
 position_1 = left_foot_end_empty_location[1]
 r.move_head_or_tail('MCH_footRoll_1_L', rig, False, True, 0, (position_0, position_1, pos_2[2]))
 
 pos_1, pos_2 = r.bone_global_locations(rig, 'MCH_foot_R')
-r.new_bone_creation(pos_2, right_foot_end_empty_location, 'MCH_footRoll_1_R', rig, 'ROOT', False, 0)
+r.new_bone_creation(pos_2, right_foot_end_empty_location, 'MCH_footRoll_1_R', rig, 'root', False, 0)
 position_0 = right_foot_end_empty_location[0]
 position_1 = right_foot_end_empty_location[1]
 r.move_head_or_tail('MCH_footRoll_1_R', rig, False, True, 0, (position_0, position_1, pos_2[2]))
@@ -177,9 +177,9 @@ r.limit_rotation(rig, 'MCH_footRoll_1_R', max_x=r.degree_to_radians(170), limit_
 
 # 16-21
 start_point, global_pos, end_point, global_alt = r.object_location('footEnd_Empty_L', y=0.042891, alter=True)
-r.new_bone_creation(start_point, end_point, 'heelPosition_L', rig, 'ROOT', False, 0)
+r.new_bone_creation(start_point, end_point, 'heelPosition_L', rig, 'root', False, 0)
 start_point, global_pos, end_point, global_alt = r.object_location('footEnd_Empty_R', y=0.042891, alter=True)
-r.new_bone_creation(start_point, end_point, 'heelPosition_R', rig, 'ROOT', False, 0)
+r.new_bone_creation(start_point, end_point, 'heelPosition_R', rig, 'root', False, 0)
 
 r.copy_rotation(rig, 'heelPosition_L',subtarget='footRollCTRL_L', use_x=True, target_space='LOCAL', owner_space='LOCAL')
 r.copy_rotation(rig, 'heelPosition_R',subtarget='footRollCTRL_R', use_x=True, target_space='LOCAL', owner_space='LOCAL')

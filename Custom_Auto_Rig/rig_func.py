@@ -412,7 +412,7 @@ class Rigging_Functions:
         bpy.ops.object.mode_set(mode='EDIT')
         self.remove_edit_and_arm_selection(rig_name)
         arm = bpy.data.armatures[rig_name]
-        bone = arm.edit_bones.new("ROOT")
+        bone = arm.edit_bones.new("root")
         bone.head = (0, 0, 0)  # Starting position
         bone.tail = (0, 0, 0.185127)  # Ending position
     
