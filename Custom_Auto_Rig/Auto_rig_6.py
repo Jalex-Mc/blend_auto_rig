@@ -24,12 +24,80 @@ r.remove_edit_and_arm_selection(rig)
 
 ### Creating custom properties ###
 
-def custom_bone_prop(rig_name, bone_name, prop_name, prop_value):
-    obj = bpy.data.objects[rig]
-    bone = obj.pose.bones[bone_name]
-    bone[prop_name] = prop_value
-    prop = bone.id_properties_ui(prop_name)
-    prop.update(soft_min=0, soft_max=1, min=0.0, max=1.0)
+obj = bpy.data.objects[rig]
+bone = obj.pose.bones['root']
+bone["FK IK"] = 1.0
+prop = bone.id_properties_ui("FK IK")
+prop.update(soft_min=0, soft_max=1, min=0.0, max=1.0)
 
+data_path = bone["FK IK"]
+#correct data path for driver = pose.bones["Bone.001"]["FK IK"]
+full_data_path = bpy.data.objects[rig].pose.bones["root"]["FK IK"]
+
+### Creating Drivers for FK IK Switch ###
+
+FK = ['humerus_FK_L', 'humerus_FK_R', 'forearm_FK_L', 'forearm_FK_R', 'armTwist_1_FK_L', 'armTwist_1_FK_R', 'armTwist_2_FK_L', 'armTwist_2_FK_R', 'armTwist_3_FK_L', 'armTwist_3_FK_R', 'hand_FK_L', 'hand_FK_R']
+IK = ['humerus_IK_L', 'humerus_IK_R', 'forearm_IK_L', 'forearm_IK_R', 'armTwist_1_IK_L', 'armTwist_1_IK_R', 'armTwist_2_IK_L', 'armTwist_2_IK_R', 'armTwist_3_IK_L', 'armTwist_3_IK_R', 'hand_IK_L', 'hand_IK_R']
+deform_list = ["humerus_L", "humerus_R", "forearm_L",  "forearm_R", "armTwist_1_L", "armTwist_1_R", "armTwist_2_L", "armTwist_2_R", "armTwist_3_L","armTwist_3_R", "hand_L", "hand_R"]
+
+armature_obj = bpy.data.objects.get(rig)
+
+for item in deform_list:
+    # Copy Transforms.001 - IK
+    # Copy Transforms - FK
+    ##IK below - 
+    bone = armature_obj.pose.bones.get(item)
+    constraint_name = "Copy Transforms.001"
+    constraint = bone.constraints.get(constraint_name)
+    driver = constraint.driver_add("influence")
+    driver2 = driver.driver
+    driver2.type = 'AVERAGE'
+    var = driver2.variables.new()
+    var.name = 'var'
+    target = var.targets[0]
+    target.id = bpy.data.objects.get(rig)
+    target.data_path = 'pose.bones["root"]["FK IK"]'
+    driver.modifiers.remove(driver.modifiers[0])
+
+    driver.keyframe_points.insert(0,1)
+    driver.keyframe_points.insert(1,0)
+    point1 = driver.keyframe_points[0]
+    point2 = driver.keyframe_points[1]
+
+    #point1.interpolation = "SINE"
+    point1.easing = "EASE_OUT"
+    point1.handle_left = (-0.333333, 1.33333)
+    point1.handle_right = (0.333333, 0.666667)
+    #point2.interpolation = "SINE"
+    point2.handle_left = (0.666667, 0.333333)
+    point2.handle_right = (1.33333, -0.333333)
+
+    ##FK below - 
+    constraint_name = "Copy Transforms"
+    constraint = bone.constraints.get(constraint_name)
+    driver = constraint.driver_add("influence")
+    driver2 = driver.driver
+    driver2.type = 'AVERAGE'
+    var = driver2.variables.new()
+    var.name = 'var'
+    target = var.targets[0]
+    target.id = bpy.data.objects.get(rig)
+    target.data_path = 'pose.bones["root"]["FK IK"]'
+    driver.modifiers.remove(driver.modifiers[0])
+
+    driver.keyframe_points.insert(0,0)
+    driver.keyframe_points.insert(1,1)
+
+    point1 = driver.keyframe_points[0]
+    point2 = driver.keyframe_points[1]
+
+    #point1.interpolation = "SINE"
+    point1.easing = "EASE_OUT"
+    point1.handle_left = (-0.333333, -0.333333)
+    point1.handle_right = (0.333333, 0.333333)
+
+    #point2.interpolation = "SINE"
+    point2.handle_left = (0.666667, 0.666667)
+    point2.handle_right = (1.33333, 1.33333)
 
 sys.path.remove(module_dir)
