@@ -4,6 +4,7 @@ import math
 import os
 import sys
 
+'''Run each script one after another, running the CTRLs script after Auto_rig_6'''
 
 # Add the directory containing your module to the Python path (before importing it)
 module_dir = os.path.abspath('O:/Onedrive/Python_Blender/blend_auto_rig/Custom_Auto_Rig')
