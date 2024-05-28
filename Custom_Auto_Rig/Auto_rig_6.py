@@ -100,4 +100,27 @@ for item in deform_list:
     point2.handle_left = (0.666667, 0.666667)
     point2.handle_right = (1.33333, 1.33333)
 
+
+## CLEAN UP
+## handIK to hand_ik_Ctrl in the IK on the forearm
+## clavicle_MCH_L needs to parent spine_3
+## change knee pole parents to root
+## thumb_2_L target needs to be thumbrotation not pinky
+
+# thumb rotation roll?
+## on clavicle copy rot, after original
+## lock toesIK on the Y and Z axis
+## move scapula to just deform and not CTRL
+# handFK parent to forearm fk
+## remove copy rotation from hand bone
+
+## hiding non-CTRL bones/Controls ##
+arm = bpy.data.armatures[rig]
+arm.collections.get("Deform").is_visible = False
+arm.collections.get("ACCESSORY").is_visible = False
+arm.collections.get("FK").is_visible = False
+arm.collections.get("IK").is_visible = False
+arm.collections.get("RBF").is_visible = False
+
+
 sys.path.remove(module_dir)

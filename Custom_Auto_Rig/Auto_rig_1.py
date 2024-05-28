@@ -6,7 +6,7 @@ import sys
 
 '''Run each script one after another, running the CTRLs script after Auto_rig_6'''
 
-# Add the directory containing your module to the Python path (before importing it)
+# Adds the directory containing your module to the Python path (before importing it). Removed on the last line of every script
 module_dir = os.path.abspath('O:/Onedrive/Python_Blender/blend_auto_rig/Custom_Auto_Rig')
 sys.path.insert(0, module_dir)
 

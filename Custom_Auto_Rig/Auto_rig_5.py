@@ -55,6 +55,8 @@ deform_list = [
     "butt_R",
     "butt_L",
     "femur_L",
+    "femurDeform_L",
+    "femurDeform_R",
     "femur_R",
     "tibia_L",
     "tibia_R",
@@ -102,7 +104,7 @@ bones_to_assign = {'Deform': deform_list, 'CTRL': CTRL, 'ACCESSORY': ACCESSORY, 
 def deform_bones(rig_name):
     r.set_mode('OBJECT')
     r.remove_object_selection()
-    r.object_selection(rig)
+    r.object_selection(rig_name)
     r.set_mode('EDIT')
     arm = bpy.data.armatures[rig_name]
     bone_list = r.rig_bone_list(rig_name)
@@ -129,6 +131,8 @@ for bone in left_hand_rotation_bones:
     r.remove_edit_and_arm_selection(rig)
     r.set_mode('OBJECT')
     r.remove_object_selection()
+    r.object_selection(rig)
+    r.set_mode('EDIT')
     arm = bpy.data.armatures[rig]
     bone = arm.edit_bones[bone]
     bone.roll *= -1 

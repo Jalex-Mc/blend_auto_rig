@@ -4,6 +4,15 @@ import math
 import os
 import sys
 
+'''
+ADJUST
+IK POLE ROTATIONS
+BEFORE 
+STARTING
+THIS
+SCRIPT
+'''
+
 # Add the directory containing your module to the Python path (before importing it)
 module_dir = os.path.abspath('O:/Onedrive/Python_Blender/blend_auto_rig/Custom_Auto_Rig')
 sys.path.insert(0, module_dir)
@@ -153,8 +162,22 @@ r.parent_bone(rig, 'femurDeform_L', 'femur_L', False)
 r.ik_properties(rig, 'tibia_L', lock_ik_x=True, lock_ik_y=True)
 r.ik_properties(rig, 'tibia_R', lock_ik_x=True, lock_ik_y=True)
 
-r.parent_bone(rig, 'kneePole_L', 'IKpoleHelpers_2_L', False)
-r.parent_bone(rig, 'kneePole_R', 'IKpoleHelpers_2_R', False)
+## parent with offset doesn't work for the knee pole for some reason, it'll always try to be in front of the parent
+r.parent_bone(rig, 'kneePole_L', 'root', False)
+r.parent_bone(rig, 'kneePole_R', 'root', False)
+
+
+bone = r.select_bone_as_active_pose(rig, 'kneePole_L')
+copy = bone.constraints.new(type='CHILD_OF')
+target = bpy.data.objects[rig]
+copy.target = target
+copy.subtarget = 'IKpoleHelpers_2_L'
+
+bone = r.select_bone_as_active_pose(rig, 'kneePole_R')
+copy = bone.constraints.new(type='CHILD_OF')
+target = bpy.data.objects[rig]
+copy.target = target
+copy.subtarget = 'IKpoleHelpers_2_R'
 
 r.set_mode('OBJECT')
 r.remove_edit_and_arm_selection(rig)
@@ -177,33 +200,33 @@ r.flip_bone(rig, 'hipTwist')
 r.limit_rotation(rig, 'hipTwist', max_x=r.degree_to_radians(25),min_x=r.degree_to_radians(-25),max_y=r.degree_to_radians(15),min_y=r.degree_to_radians(-15),max_z=r.degree_to_radians(10),min_z=r.degree_to_radians(-10),limit_x=True,limit_y=True,limit_z=True,owner_space='LOCAL',target_space='LOCAL')
 r.parent_bone(rig, 'hipTwist', 'pelvis', False)
 head, dontneed = r.bone_global_locations(rig, 'pelvis')
-dontneed, tail = r.bone_global_locations(rig, 'spine_03')
+dontneed, tail = r.bone_global_locations(rig, 'spine_3')
 head[1] += .1
 tail[1] += .1
 r.new_bone_creation(head, tail, 'backCTRL', rig, 'pelvis', False, 0)
 
 r.parent_bone(rig, 'backCTRL', 'pelvis', False)
-spines = ['spine_01', 'spine_02', 'spine_03']
+spines = ['spine_1', 'spine_2', 'spine_3']
 for item in spines:
     r.copy_rotation(rig, item, influence=1.0, euler_order='YZX', mix_mode='AFTER', subtarget='backCTRL',use_x=True,use_y=True,use_z=True, target_space='LOCAL', owner_space='LOCAL')
     arm = bpy.data.objects[rig]
     bone = r.select_bone_as_active_pose(rig, item)
     bone.constraints[-1].mix_mode = 'AFTER'
-    if item == 'spine_01':
+    if item == 'spine_1':
         r.limit_rotation(rig, item, max_x=r.degree_to_radians(35),min_x=r.degree_to_radians(-25),max_y=r.degree_to_radians(15),min_y=r.degree_to_radians(-15),max_z=r.degree_to_radians(15),min_z=r.degree_to_radians(-15),limit_x=True,limit_y=True,limit_z=True,owner_space='LOCAL', target_space='LOCAL')
-    if item == 'spine_02':
+    if item == 'spine_2':
         r.limit_rotation(rig, item, max_x=r.degree_to_radians(40),min_x=r.degree_to_radians(-25),max_y=r.degree_to_radians(20),min_y=r.degree_to_radians(-20),max_z=r.degree_to_radians(24),min_z=r.degree_to_radians(-24),limit_x=True,limit_y=True,limit_z=True,owner_space='LOCAL', target_space='LOCAL')
-    if item == 'spine_03':
+    if item == 'spine_3':
         r.limit_rotation(rig, item, max_x=r.degree_to_radians(35),min_x=r.degree_to_radians(-25),max_y=r.degree_to_radians(12),min_y=r.degree_to_radians(-12),max_z=r.degree_to_radians(20),min_z=r.degree_to_radians(-20),limit_x=True,limit_y=True,limit_z=True,owner_space='LOCAL', target_space='LOCAL')
 
-head, unneeded = r.bone_global_locations(rig, 'neck_01')
-unneeded, tail = r.bone_global_locations(rig, 'neck_02')
+head, unneeded = r.bone_global_locations(rig, 'neck_1')
+unneeded, tail = r.bone_global_locations(rig, 'neck_2')
 
 head[1] += .08
 tail[1] += .08
 
-r.new_bone_creation(head, tail, 'neckHead', rig, 'spine_03', False, 0)
-r.copy_rotation(rig, 'neck_01', influence=1.0, euler_order='YZX', mix_mode='AFTER', subtarget='neckHead', use_x=True, use_y=True, use_z=True, target_space='LOCAL',owner_space='LOCAL')
+r.new_bone_creation(head, tail, 'neckHead', rig, 'spine_3', False, 0)
+r.copy_rotation(rig, 'neck_1', influence=1.0, euler_order='YZX', mix_mode='AFTER', subtarget='neckHead', use_x=True, use_y=True, use_z=True, target_space='LOCAL',owner_space='LOCAL')
 r.copy_rotation(rig, 'head', influence=1.0, euler_order='YZX', mix_mode='AFTER', subtarget='neckHead', use_x=True, use_y=True, use_z=True, target_space='LOCAL',owner_space='LOCAL')
 
 sys.path.remove(module_dir)

@@ -54,7 +54,7 @@ r.renamer(rig, 'armTwist_IK_R.002', 'armTwist_3_IK_R')
 
 r.copy_rotation(rig, 'armTwist_1_IK_L',influence=0.3 ,subtarget='armTwist_2_IK_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
 r.copy_rotation(rig, 'armTwist_2_IK_L',influence=0.727 ,subtarget='armTwist_3_IK_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
-r.copy_rotation(rig, 'armTwist_3_IK_L',subtarget='handIK_CTRL_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
+r.copy_rotation(rig, 'armTwist_3_IK_L',subtarget='hand_IK_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
 
 r.copy_rotation(rig, 'armTwist_1_FK_L',influence=0.3 ,subtarget='armTwist_2_FK_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
 r.copy_rotation(rig, 'armTwist_2_FK_L',influence=0.727 ,subtarget='armTwist_3_FK_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
@@ -62,7 +62,7 @@ r.copy_rotation(rig, 'armTwist_3_FK_L',subtarget='hand_FK_L', use_x=True, use_y=
 
 r.copy_rotation(rig, 'armTwist_1_IK_R',influence=0.3 ,subtarget='armTwist_2_IK_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
 r.copy_rotation(rig, 'armTwist_2_IK_R',influence=0.727 ,subtarget='armTwist_3_IK_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
-r.copy_rotation(rig, 'armTwist_3_IK_R',subtarget='handIK_CTRL_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
+r.copy_rotation(rig, 'armTwist_3_IK_R',subtarget='hand_IK_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
 
 r.copy_rotation(rig, 'armTwist_1_FK_R',influence=0.3 ,subtarget='armTwist_2_FK_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
 r.copy_rotation(rig, 'armTwist_2_FK_R',influence=0.727 ,subtarget='armTwist_3_FK_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
@@ -86,5 +86,9 @@ r.duplicate_bones(rig, 'humerus_R', 'RBF_Upperarm_R', 'humerus_R', False, humeru
 femur_roll = r.bone_roll(rig, 'femur_R')
 r.duplicate_bones(rig, 'femur_R', 'RBF_leg_R', 'femur_R', False, femur_roll, False)
 r.copy_rotation(rig, 'clavicle_R', mix_mode='AFTER', subtarget='clavicle_MCH_R', use_x=True,use_y=True,use_z=True, target_space='LOCAL', owner_space='LOCAL')
+
+r.parent_bone(rig, 'clavicle_MCH_R', 'spine_3', False)
+r.parent_bone(rig, 'clavicle_MCH_L', 'spine_3', False)
+
 
 sys.path.remove(module_dir)

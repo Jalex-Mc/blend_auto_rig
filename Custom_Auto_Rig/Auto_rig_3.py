@@ -99,7 +99,7 @@ for bone in arm.data.bones:
 
 left_fingers.remove('thumb_2_L')
 sub = item.split('_')[0] + 'Rotation_L'
-r.copy_rotation(rig, 'thumb_2_L', influence=1.0, mix_mode='AFTER', subtarget=sub, use_x=True, target_space='LOCAL', owner_space='LOCAL')
+r.copy_rotation(rig, 'thumb_2_L', influence=1.0, mix_mode='AFTER', subtarget='thumbRotation_L', use_x=True, target_space='LOCAL', owner_space='LOCAL')
 
 for item in left_fingers:
     if '_1_' in item:
@@ -492,8 +492,8 @@ r.remove_edit_and_arm_selection(rig)
 r.set_mode('OBJECT')
 r.remove_object_selection()
 
-r.copy_rotation(rig, 'hand_L', subtarget='hand_IK_L')
-r.copy_rotation(rig, 'hand_R', subtarget='hand_IK_R')
+# r.copy_rotation(rig, 'hand_L', subtarget='hand_IK_L')
+# r.copy_rotation(rig, 'hand_R', subtarget='hand_IK_R')
 
 r.parent_bone(rig, 'forearm_IK_L', 'humerus_IK_L', True)
 r.parent_bone(rig, 'forearm_IK_R', 'humerus_IK_R', True)
@@ -501,8 +501,8 @@ r.parent_bone(rig, 'forearm_FK_L', 'humerus_FK_L', True)
 r.parent_bone(rig, 'forearm_FK_R', 'humerus_FK_R', True)
 
 
-r.create_IK(rig, 'forearm_IK_L', 2, r.degree_to_radians(-80), 'elbowPole_L', rig, 'handIK_L', rig)
-r.create_IK(rig, 'forearm_IK_R', 2, r.degree_to_radians(-80), 'elbowPole_R', rig, 'handIK_R', rig)
+r.create_IK(rig, 'forearm_IK_L', 2, r.degree_to_radians(-80), 'elbowPole_L', rig, 'hand_IK_L', rig)
+r.create_IK(rig, 'forearm_IK_R', 2, r.degree_to_radians(-80), 'elbowPole_R', rig, 'hand_IK_R', rig)
 
 
 print(left_arm_bones)
