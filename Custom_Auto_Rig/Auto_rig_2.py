@@ -163,9 +163,8 @@ r.ik_properties(rig, 'tibia_L', lock_ik_x=True, lock_ik_y=True)
 r.ik_properties(rig, 'tibia_R', lock_ik_x=True, lock_ik_y=True)
 
 ## parent with offset doesn't work for the knee pole for some reason, it'll always try to be in front of the parent
-r.parent_bone(rig, 'kneePole_L', 'root', False)
-r.parent_bone(rig, 'kneePole_R', 'root', False)
-
+# r.parent_bone(rig, 'kneePole_L', '', False)
+# r.parent_bone(rig, 'kneePole_R', '', False)
 
 bone = r.select_bone_as_active_pose(rig, 'kneePole_L')
 copy = bone.constraints.new(type='CHILD_OF')

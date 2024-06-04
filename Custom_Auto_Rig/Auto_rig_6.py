@@ -101,18 +101,38 @@ for item in deform_list:
     point2.handle_right = (1.33333, 1.33333)
 
 
-## CLEAN UP
-## handIK to hand_ik_Ctrl in the IK on the forearm
-## clavicle_MCH_L needs to parent spine_3
-## change knee pole parents to root
-## thumb_2_L target needs to be thumbrotation not pinky
+## CLEAN UP and Bug fixes
 
-# thumb rotation roll?
-## on clavicle copy rot, after original
-## lock toesIK on the Y and Z axis
-## move scapula to just deform and not CTRL
-# handFK parent to forearm fk
-## remove copy rotation from hand bone
+arm = bpy.data.armatures[rig]
+bone_for_roll = arm.edit_bones['thumbRotation_L']
+bone_for_roll.roll = r.bone_roll(rig, 'thumb_2_L')
+
+bone_for_roll = arm.edit_bones['thumbRotation_R']
+bone_for_roll.roll = r.bone_roll(rig, 'thumb_2_R')
+
+bone = r.select_bone_as_active_pose(rig, 'clavicle_L')
+bone.constraints[-1].mix_mode = "AFTER"
+
+bone = r.select_bone_as_active_pose(rig, 'clavicle_R')
+bone.constraints[-1].mix_mode = "AFTER"
+
+r.lock_rotation(rig, 'toesIK_L', y=True, z=True)
+r.lock_rotation(rig, 'toesIK_R', y=True, z=True)
+
+r.parent_bone(rig, 'hand_IK_L', 'root', False)
+r.parent_bone(rig, 'hand_IK_R', 'root', False)
+
+r.parent_bone(rig, 'pelvis_L', 'hipTwist', False)
+r.parent_bone(rig, 'pelvis_R', 'hipTwist', False)
+
+arm = bpy.data.armatures[rig]
+bone = arm.edit_bones['kneePole_L']
+bone.parent = None
+bone = arm.edit_bones['kneePole_R']
+bone.parent = None
+
+
+r.set_mode('POSE')
 
 ## hiding non-CTRL bones/Controls ##
 arm = bpy.data.armatures[rig]

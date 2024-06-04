@@ -4,7 +4,11 @@ import math
 import os
 import sys
 
-'''Run each script one after another, running the CTRLs script after Auto_rig_6'''
+'''Run each script one after another, running the CTRLs script after Auto_rig_6
+    On script 1(this one), once run, fix IK angle on the leg IK,
+    On script 3, once, run, fix the IK angle of the arms. 
+    When rotating the ange, center it on the pole location in the front Orthographic view
+'''
 
 # Adds the directory containing your module to the Python path (before importing it). Removed on the last line of every script
 module_dir = os.path.abspath('O:/Onedrive/Python_Blender/blend_auto_rig/Custom_Auto_Rig')

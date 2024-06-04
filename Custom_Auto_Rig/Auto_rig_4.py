@@ -54,24 +54,24 @@ r.renamer(rig, 'armTwist_IK_R.002', 'armTwist_3_IK_R')
 
 r.copy_rotation(rig, 'armTwist_1_IK_L',influence=0.3 ,subtarget='armTwist_2_IK_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
 r.copy_rotation(rig, 'armTwist_2_IK_L',influence=0.727 ,subtarget='armTwist_3_IK_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
-r.copy_rotation(rig, 'armTwist_3_IK_L',subtarget='hand_IK_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
+r.copy_rotation(rig, 'armTwist_3_IK_L',subtarget='hand_IK_L', use_y=True, target_space='LOCAL', owner_space='LOCAL')
 
 r.copy_rotation(rig, 'armTwist_1_FK_L',influence=0.3 ,subtarget='armTwist_2_FK_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
 r.copy_rotation(rig, 'armTwist_2_FK_L',influence=0.727 ,subtarget='armTwist_3_FK_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
-r.copy_rotation(rig, 'armTwist_3_FK_L',subtarget='hand_FK_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
+r.copy_rotation(rig, 'armTwist_3_FK_L',subtarget='hand_FK_L', use_y=True, target_space='LOCAL', owner_space='LOCAL')
 
 r.copy_rotation(rig, 'armTwist_1_IK_R',influence=0.3 ,subtarget='armTwist_2_IK_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
 r.copy_rotation(rig, 'armTwist_2_IK_R',influence=0.727 ,subtarget='armTwist_3_IK_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
-r.copy_rotation(rig, 'armTwist_3_IK_R',subtarget='hand_IK_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
+r.copy_rotation(rig, 'armTwist_3_IK_R',subtarget='hand_IK_R', use_y=True, target_space='LOCAL', owner_space='LOCAL')
 
 r.copy_rotation(rig, 'armTwist_1_FK_R',influence=0.3 ,subtarget='armTwist_2_FK_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
 r.copy_rotation(rig, 'armTwist_2_FK_R',influence=0.727 ,subtarget='armTwist_3_FK_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
-r.copy_rotation(rig, 'armTwist_3_FK_R',subtarget='hand_FK_R', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
+r.copy_rotation(rig, 'armTwist_3_FK_R',subtarget='hand_FK_R', use_y=True, target_space='LOCAL', owner_space='LOCAL')
 
 ## rbf bone creation ##
 
 clavicle_roll = r.bone_roll(rig, 'clavicle_L')
-r.duplicate_bones(rig, 'clavicle_L', 'clavicle_MCH_L', 'clavicle_L', False, clavicle_roll, False)
+r.duplicate_bones(rig, 'clavicle_L', 'clavicle_MCH_L', 'spine_3', False, clavicle_roll, False)
 humerus_roll = r.bone_roll(rig, 'humerus_L')
 r.duplicate_bones(rig, 'humerus_L', 'RBF_Upperarm_L', 'humerus_L', False, humerus_roll, False)
 femur_roll = r.bone_roll(rig, 'femur_L')
@@ -80,7 +80,7 @@ r.copy_rotation(rig, 'clavicle_L', mix_mode='AFTER', subtarget='clavicle_MCH_L',
 
 
 clavicle_roll = r.bone_roll(rig, 'clavicle_R')
-r.duplicate_bones(rig, 'clavicle_R', 'clavicle_MCH_R', 'clavicle_R', False, clavicle_roll, False)
+r.duplicate_bones(rig, 'clavicle_R', 'clavicle_MCH_R', 'spine_3', False, clavicle_roll, False)
 humerus_roll = r.bone_roll(rig, 'humerus_R')
 r.duplicate_bones(rig, 'humerus_R', 'RBF_Upperarm_R', 'humerus_R', False, humerus_roll, False)
 femur_roll = r.bone_roll(rig, 'femur_R')
@@ -90,5 +90,7 @@ r.copy_rotation(rig, 'clavicle_R', mix_mode='AFTER', subtarget='clavicle_MCH_R',
 r.parent_bone(rig, 'clavicle_MCH_R', 'spine_3', False)
 r.parent_bone(rig, 'clavicle_MCH_L', 'spine_3', False)
 
+r.parent_bone(rig, 'hand_FK_L', 'forearm_FK_L', True)
+r.parent_bone(rig, 'hand_FK_R', 'forearm_FK_R', True)
 
 sys.path.remove(module_dir)
