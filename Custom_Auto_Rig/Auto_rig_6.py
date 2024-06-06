@@ -131,7 +131,6 @@ bone.parent = None
 bone = arm.edit_bones['kneePole_R']
 bone.parent = None
 
-
 r.set_mode('POSE')
 
 ## hiding non-CTRL bones/Controls ##
