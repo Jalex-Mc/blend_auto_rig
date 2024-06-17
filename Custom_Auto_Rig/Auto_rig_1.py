@@ -6,7 +6,7 @@ import sys
 
 '''Run each script one after another, running the CTRLs script after Auto_rig_6
     On script 1(this one), once run, fix IK angle on the leg IK,
-    On script 3, once, run, fix the IK angle of the arms. 
+    On script 3, once run, fix the IK angle of the arms. 
     When rotating the ange, center it on the pole location in the front Orthographic view
 '''
 
@@ -23,6 +23,9 @@ r = Rigging_Functions()
 rig = 'Female Transfer Rig'
 
 # inspect.getfullargspec(r.set_mode)
+
+# Makes sure the scene's orientation transformation is set to Global
+bpy.context.scene.transform_orientation_slots[0].type = 'GLOBAL'
 
 r.set_mode('OBJECT')
 r.remove_object_selection()
