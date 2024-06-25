@@ -4,6 +4,15 @@ import math
 import os
 import sys
 
+'''
+ADJUST
+IK POLE ROTATIONS
+BEFORE 
+STARTING
+THIS
+SCRIPT
+'''
+
 # Add the directory containing your module to the Python path (before importing it)
 module_dir = os.path.abspath('O:/Onedrive/Python_Blender/blend_auto_rig/Custom_Auto_Rig')
 sys.path.insert(0, module_dir)

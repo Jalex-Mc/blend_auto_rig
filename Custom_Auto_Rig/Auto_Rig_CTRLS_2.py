@@ -6,6 +6,8 @@ import json
 '''This Script Moves the CTRLS to the Locations grabbed in Auto_Rig_CTRLS_1'''
 '''If there is no txt file named end_points, make sure to go through Auto_Rig_CTRLS_1'''
 
+'''If if it keeps crashing, unselect everything hide the CTRL collection(keep it selectable), and select just the rig'''
+
 scene = bpy.context.scene
 
 def clean_select(obj):
@@ -33,10 +35,10 @@ def points_list(obj):
 
         # Iterate through the vertices
         for vert in bm.verts:
-            print("working")
+            # print("working")
             # Get the world location of each vertex
             world_loc = obj.matrix_world @ vert.co
-            print("Vertex", vert.index, ":", world_loc)
+            # print("Vertex", vert.index, ":", world_loc)
             og_point_locations.append(world_loc)
 
     return og_point_locations
@@ -97,7 +99,7 @@ def move_vertices(list):
 
             # Move the selected vertices
                 for index, vert in enumerate(selected_verts):
-                    print('working')
+                    # print('working')
                 # You can adjust the movement by changing these values
                     vert.x += distance_between_points[index].x
                     vert.y += distance_between_points[index].y
@@ -110,13 +112,14 @@ def move_vertices(list):
 
 with open('O:\\Onedrive\\Python_Blender\\blend_auto_rig\\Custom_Auto_Rig\\end_points.txt', 'r') as file:
     end_points = json.load(file)
+    print("read")
 
 
 obj_coll = get_list_of_objs_in_coll('CTRLS')
 count = 0
 for item in obj_coll:
-    print(item)
-    print(end_points[item])
+    # print(item)
+    # print(end_points[item])
     if item in end_points:        
         obj = clean_select(item)
         bpy.ops.object.mode_set(mode='OBJECT')
@@ -133,8 +136,10 @@ for item in obj_coll:
         for index, vert in enumerate(bm.verts):
             mat_world = obj.matrix_world
             vec = end_points[item][index]
-            print(f"{vert.index}: vec: {vec}")
+            # print(f"{vert.index}: vec: {vec}")
             vert.co.x = vec[0]
             vert.co.y = vec[1]
             vert.co.z = vec[2]
-            print(f"{vert.index}: vec: {tuple(vert.co)}")
+            # print(f"{vert.index}: vec: {tuple(vert.co)}")
+
+bpy.ops.object.mode_set(mode='OBJECT')

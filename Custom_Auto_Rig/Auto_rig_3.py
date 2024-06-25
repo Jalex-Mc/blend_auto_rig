@@ -25,8 +25,8 @@ tail = pole_location
 tail[1] += .1
 r.new_bone_creation(head, tail, 'elbowPole_L', rig, 'root', False, 0)
 head, tail = r.bone_global_locations(rig, 'elbowPole_L')
-head[1] += .16
-tail[1] += .16
+head[1] += .5
+tail[1] += .5
 r.move_bone_world_location(rig, 'elbowPole_L', head, tail)
 
 pole_location, pole_global_location = r.object_location('elbowPoleEmpty_R')
@@ -35,8 +35,8 @@ tail = pole_location
 tail[1] += .1
 r.new_bone_creation(head, tail, 'elbowPole_R', rig, 'root', False, 0)
 head, tail = r.bone_global_locations(rig, 'elbowPole_R')
-head[1] += .16
-tail[1] += .16
+head[1] += .5
+tail[1] += .5
 r.move_bone_world_location(rig, 'elbowPole_R', head, tail)
 
 
@@ -132,7 +132,59 @@ for item in left_rotation:
     if 'thumb' in item:
         pass
     else:
-        r.limit_rotation(rig, item, max_x=r.degree_to_radians(85), limit_x=True, owner_space='LOCAL')
+        r.limit_rotation(rig, item, max_x=r.degree_to_radians(100), limit_x=True, owner_space='LOCAL')
+
+r.remove_edit_and_arm_selection(rig)
+r.set_mode('OBJECT')
+r.remove_object_selection()
+r.object_selection(rig)
+r.set_mode('EDIT')
+forearm_roll = r.bone_roll(rig, 'forearm_L')
+
+for bone in arm.data.bones:
+    if bone.parent is None:
+        pass
+    elif bone.parent.name == 'hand_R':
+        right_fingers.append(bone.name)
+        for child_bone in bone.children_recursive:
+            right_fingers.append(child_bone.name)
+
+right_fingers.remove('thumb_2_R')
+sub = item.split('_')[0] + 'Rotation_R'
+r.copy_rotation(rig, 'thumb_2_R', influence=1.0, mix_mode='AFTER', subtarget='thumbRotation_R', use_x=True, target_space='LOCAL', owner_space='LOCAL')
+
+for item in right_fingers:
+    if '_1_' in item:
+        right_fingers.remove(item)
+
+for item in right_fingers:
+    if '_2_' in item:
+        r.lock_rotation(rig, item, z=True)
+    else:
+        r.lock_rotation(rig, item, y=True, z=True)
+
+for item in right_fingers:
+    if 'Rotation' in item:
+        right_fingers.remove(item)
+        right_rotation.append(item)
+
+for item in right_fingers:
+    if '_4_' in item or 'thumb_3_R' in item:
+        sub = item.split('_')[0] + 'Rotation_R'
+        r.copy_rotation(rig, item, influence=1.0, mix_mode='AFTER', subtarget=sub, use_x=True, target_space='LOCAL', owner_space='LOCAL')
+        bone = r.select_bone_as_active_pose(rig, item)
+        bone.constraints[-1].mix_mode = "AFTER"
+    else:
+        sub = item.split('_')[0] + 'Rotation_R'
+        r.copy_rotation(rig, item, influence=1.0, mix_mode='BEFORE', subtarget=sub, use_x=True, target_space='LOCAL', owner_space='LOCAL')
+        bone = r.select_bone_as_active_pose(rig, item)
+        bone.constraints[-1].mix_mode = "BEFORE"
+
+for item in right_rotation:
+    if 'thumb' in item:
+        pass
+    else:
+        r.limit_rotation(rig, item, max_x=r.degree_to_radians(100), limit_x=True, owner_space='LOCAL')
 
 r.remove_edit_and_arm_selection(rig)
 r.set_mode('OBJECT')

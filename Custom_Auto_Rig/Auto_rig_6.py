@@ -131,6 +131,15 @@ bone.parent = None
 bone = arm.edit_bones['kneePole_R']
 bone.parent = None
 
+bone = r.select_bone_as_active_pose(rig, 'neck_1')
+bone.constraints[-1].mix_mode = "AFTER"
+
+bone = r.select_bone_as_active_pose(rig, 'head')
+bone.constraints[-1].mix_mode = "AFTER"
+
+r.limit_rotation(rig, 'clavicle_L', max_z=r.degree_to_radians(30), min_z=r.degree_to_radians(-9), limit_z=True, owner_space='LOCAL')
+r.limit_rotation(rig, 'clavicle_R', max_z=r.degree_to_radians(9), min_z=r.degree_to_radians(-30), limit_z=True, owner_space='LOCAL')
+
 r.set_mode('POSE')
 
 ## hiding non-CTRL bones/Controls ##

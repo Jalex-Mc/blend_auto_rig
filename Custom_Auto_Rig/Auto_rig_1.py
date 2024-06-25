@@ -83,23 +83,23 @@ close_toes_L = ['bigToe_1_L', 'indexToe_1_L', 'ringToe_1_L', 'pinkyToe_1_L', 'mi
 for item in close_toes_L:
     r.lock_rotation(rig, item, y=True)
     r.lock_rotation(rig, (item[:-4] + 'Rotation_L'), y=True, z=True)
-    r.copy_rotation(rig, item, subtarget=(item[:-3] + 'Rotation_L'),use_x=True, target_space='LOCAL', owner_space='LOCAL' )
+    r.copy_rotation(rig, item, subtarget=(item[:-4] + 'Rotation_L'),use_x=True, target_space='LOCAL', owner_space='LOCAL' )
 close_toes_R =  ['bigToe_1_R', 'indexToe_1_R', 'ringToe_1_R', 'pinkyToe_1_R', 'midToe_1_R']
 for item in close_toes_R:
     r.lock_rotation(rig, item, y=True)
     r.lock_rotation(rig, (item[:-4] + 'Rotation_R'), y=True, z=True)
-    r.copy_rotation(rig, item, subtarget=(item[:-3] + 'Rotation_R'),use_x=True, target_space='LOCAL', owner_space='LOCAL')
+    r.copy_rotation(rig, item, subtarget=(item[:-4] + 'Rotation_R'),use_x=True, target_space='LOCAL', owner_space='LOCAL')
 
 left_rest_toes = list(set(left_toes) - set(close_toes_L))
 right_rest_toes = list(set(right_toes) - set(close_toes_R))
 
 for item in left_rest_toes:
     r.lock_rotation(rig, item, y=True, z=True)
-    r.copy_rotation(rig, item, mix_mode='AFTER', subtarget=(item[:-3] + 'Rotation_L'), use_x=True, target_space='LOCAL', owner_space='LOCAL')
+    r.copy_rotation(rig, item, mix_mode='AFTER', subtarget=(item[:-4] + 'Rotation_L'), use_x=True, target_space='LOCAL', owner_space='LOCAL')
 
 for item in right_rest_toes:
     r.lock_rotation(rig, item, y=True, z=True)
-    r.copy_rotation(rig, item, mix_mode='AFTER', subtarget=(item[:-3] + 'Rotation_R'), use_x=True, target_space='LOCAL', owner_space='LOCAL')
+    r.copy_rotation(rig, item, mix_mode='AFTER', subtarget=(item[:-4] + 'Rotation_R'), use_x=True, target_space='LOCAL', owner_space='LOCAL')
 
 r.set_mode('OBJECT')
 r.remove_edit_and_arm_selection(rig)
@@ -279,22 +279,22 @@ for item in roll_list:
     bone.roll = 0
 
 # 39-43 -
-start_point, global_pos, end_point, global_alt = r.object_location('knee_Empty_L', y=-.03, alter=True)
+start_point, global_pos, end_point, global_alt = r.object_location('knee_Empty_L', y=-.1, alter=True)
 r.new_bone_creation(start_point, end_point, 'kneePole_L', rig, 'footIK_L', False, 0)
 r.change_bone_length('kneePole_L', rig, .12)
 r.parent_bone(rig, 'kneePole_L', 'footIK_L', False)
 pos_1, pos_2 = r.bone_global_locations(rig, 'kneePole_L')
-pos_1[1] += -.2
-pos_2[1] += -.2
+pos_1[1] += -.7
+pos_2[1] += -.7
 r.move_head_or_tail('kneePole_L', rig, True, True, pos_1, pos_2)
 
-start_point, global_pos, end_point, global_alt = r.object_location('knee_Empty_R', y=-.03, alter=True)
+start_point, global_pos, end_point, global_alt = r.object_location('knee_Empty_R', y=-.1, alter=True)
 r.new_bone_creation(start_point, end_point, 'kneePole_R', rig, 'footIK_R', False, 0)
 r.change_bone_length('kneePole_R', rig, .12)
 r.parent_bone(rig, 'kneePole_R', 'footIK_R', False)
 pos_1, pos_2 = r.bone_global_locations(rig, 'kneePole_R')
-pos_1[1] += -.2
-pos_2[1] += -.2
+pos_1[1] += -.7
+pos_2[1] += -.7
 r.move_head_or_tail('kneePole_R', rig, True, True, pos_1, pos_2)
 
 
