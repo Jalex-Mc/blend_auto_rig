@@ -1,0 +1,100 @@
+alt - if no number as last character, find '_L_' or '_R_', if none, if number, take 'bone', '_', 'number',
+else, take word after last '_'.
+The above if it has none value. The below if the dictionary has a value. if it's 'alt'
+run the above.
+
+turn off all shapekeys with pass in name.
+
+list of shapekeys, on each shapekey, iterate through dictionary keys to see if the name 
+of the shapekey is in the dictionary keys. if it is, check the key value, if value is pass
+
+
+if dictionary value is pass, pass
+if dictionary key is in shapekey name - 
+if dictionary value is not alt or pass, put value(name) into variable
+if last character shapekey name is L or R
+take last character and add _L or _R to name
+this is driver target
+elif is alt
+if fist or toes and has value of alt - take all characters after second to last '_'
+find '_L_' or '_R_', if L add '_L', if R add '_R'
+elif if only 'alt', check is last character is 1 2 or 3, 
+if is - take all characters before last '_' until next '_' as name
+if not, find _L or _R. 
+if is - take characters after second to last '_' as name
+if no L or R, take characters after last '_'
+Else - pass
+
+
+
+{"Arms_up": "humerus",
+"Arms_down": "humerus",
+"Arms_forward": "humerus",
+"Arms_back": "humerus",
+"Knees_up": "alt",
+"Knees_up_butt": "femur",
+"knees_up_spine": "femur",
+"Knees_up_pelvis": "femur",
+"T-pose": "femur",
+"Leg_spread": "femur",
+"Leg_spread_front": "kneeBendDeform",
+"Leg_back": "femur",
+"Head_up": "alt",
+"Head_down": "alt",
+"Head_tilt": "alt",
+"Head_turn": "alt",
+"bend_back": "alt",
+"bend_forward": "alt",
+"bend_right": "alt",
+"bend_left": "alt",
+"turn_left": "alt",
+"turn_right": "alt",
+"fist": "alt",
+"fingers_bent_up": pass,
+"fingers_spread": pass,
+"Elbow": "alt",
+"tiptoes": "alt",
+"foot_bend_in": "alt",
+"foot_bend_out": "alt",
+"toes_bend": pass,
+"toes_together": pass,
+"toes_spread": pass,
+"toes_curl": "alt"}
+
+Probably only need knee deform for leg spread front
+action_numbers = {
+1:"Arms back",
+2:"Arms Down",
+3:"Arms forward",
+4:"Arms up",
+5:"Base",
+6:"Bend back",
+7:"Bend forward",
+8:"Bend left",
+9:"Bend right",
+10:"Elbow left",
+11:"Elbow right",
+12:"Fist Left",
+13:"Fist right",
+14:"Foot bend in left",
+15:"Foot bend in right",
+16:"Foot bend out left",
+17:"Foot bend out right",
+18:"Head down",
+19:"Head tilt left",
+20:"Head tilt right",
+21:"Head turned left",
+22:"Head turned right",
+23:"Head up",
+24:"Knees up",
+25:"Leg spread",
+26:"Legs back",
+27:"Legs Spread FWD",
+28:"T-Pose",
+29:"Tiptoes Left",
+30:"Tiptoes right",
+31:"Toes curl left",
+32:"Toes curl right",
+33:"turn Left",
+34:"turn right",
+}
