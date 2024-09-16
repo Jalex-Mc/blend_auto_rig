@@ -36,6 +36,35 @@ right_arm_bones = ['humerus_R', 'armTwist_1_R', 'forearm_R', 'armTwist_2_R', 'ar
 right_arm_FK_bones = ['humerus_FK_R', 'armTwist_FK_R', 'forearm_FK_R', 'armTwist_FK_R', 'armTwist_FK_R', 'hand_FK_R']
 right_arm_IK_bones = ['humerus_IK_R', 'armTwist_IK_R', 'forearm_IK_R', 'armTwist_IK_R', 'armTwist_IK_R', 'hand_IK_R']
 
+
+# r.copy_transforms(rig, left_arm_bones[0], 1, left_arm_IK_bones[0])
+# r.copy_transforms(rig, left_arm_bones[1], 1, left_arm_IK_bones[1])
+# r.copy_transforms(rig, left_arm_bones[2], 1, left_arm_IK_bones[2])
+# r.copy_transforms(rig, left_arm_bones[3], 1, left_arm_IK_bones[3])
+# r.copy_transforms(rig, left_arm_bones[4], 1, left_arm_IK_bones[4])
+# r.copy_transforms(rig, left_arm_bones[5], 1, left_arm_IK_bones[5])
+
+# r.copy_transforms(rig, left_arm_bones[0], 1, left_arm_FK_bones[0])
+# r.copy_transforms(rig, left_arm_bones[1], 1, left_arm_FK_bones[1])
+# r.copy_transforms(rig, left_arm_bones[2], 1, left_arm_FK_bones[2])
+# r.copy_transforms(rig, left_arm_bones[3], 1, left_arm_FK_bones[3])
+# r.copy_transforms(rig, left_arm_bones[4], 1, left_arm_FK_bones[4])
+# r.copy_transforms(rig, left_arm_bones[5], 1, left_arm_FK_bones[5])
+
+# r.copy_transforms(rig, right_arm_bones[0], 1, right_arm_IK_bones[0])
+# r.copy_transforms(rig, right_arm_bones[1], 1, right_arm_IK_bones[1])
+# r.copy_transforms(rig, right_arm_bones[2], 1, right_arm_IK_bones[2])
+# r.copy_transforms(rig, right_arm_bones[3], 1, right_arm_IK_bones[3])
+# r.copy_transforms(rig, right_arm_bones[4], 1, right_arm_IK_bones[4])
+# r.copy_transforms(rig, right_arm_bones[5], 1, right_arm_IK_bones[5])
+
+# r.copy_transforms(rig, right_arm_bones[0], 1, right_arm_FK_bones[0])
+# r.copy_transforms(rig, right_arm_bones[1], 1, right_arm_FK_bones[1])
+# r.copy_transforms(rig, right_arm_bones[2], 1, right_arm_FK_bones[2])
+# r.copy_transforms(rig, right_arm_bones[3], 1, right_arm_FK_bones[3])
+# r.copy_transforms(rig, right_arm_bones[4], 1, right_arm_FK_bones[4])
+# r.copy_transforms(rig, right_arm_bones[5], 1, right_arm_FK_bones[5])
+
 for index, item in enumerate(left_arm_bones):
     r.copy_transforms(rig, item, 1, left_arm_IK_bones[index])
 for index, item in enumerate(left_arm_bones):

@@ -214,8 +214,8 @@ arm.data.edit_bones.active = bone
 bpy.ops.armature.subdivide(number_cuts=2)
 r.remove_edit_and_arm_selection(rig)
 r.renamer(rig, 'forearm_L', 'armTwist_1_L')
-r.renamer(rig, 'forearm_L.003', 'armTwist_2_L')
-r.renamer(rig, 'forearm_L.002', 'armTwist_3_L')
+r.renamer(rig, 'forearm_L.002', 'armTwist_2_L')
+r.renamer(rig, 'forearm_L.003', 'armTwist_3_L')
 r.renamer(rig, 'forearm_L.001', 'forearm_L')
 r.parent_bone(rig, 'hand_L', 'forearm_L', True)
 
@@ -234,8 +234,8 @@ arm.data.edit_bones.active = bone
 bpy.ops.armature.subdivide(number_cuts=2)
 r.remove_edit_and_arm_selection(rig)
 r.renamer(rig, 'forearm_R', 'armTwist_1_R')
-r.renamer(rig, 'forearm_R.003', 'armTwist_2_R')
-r.renamer(rig, 'forearm_R.002', 'armTwist_3_R')
+r.renamer(rig, 'forearm_R.002', 'armTwist_2_R')
+r.renamer(rig, 'forearm_R.003', 'armTwist_3_R')
 r.renamer(rig, 'forearm_R.001', 'forearm_R')
 r.parent_bone(rig, 'hand_R', 'forearm_R', True)
 
@@ -289,7 +289,7 @@ head_count = 0
 tail_count = 1
 arm = bpy.data.armatures[rig]
 bone = arm.edit_bones['armTwist_1_L']
-print(bone)
+# print(bone)
 bone.head = at_head
 bone.tail = at_tail
 
@@ -301,7 +301,7 @@ head_count = 0
 tail_count = 1
 arm = bpy.data.armatures[rig]
 bone = arm.edit_bones['armTwist_2_L']
-print(bone)
+# print(bone)
 bone.head = at_2_L_head
 bone.tail = at_2_L_tail
 
@@ -313,7 +313,7 @@ head_count = 0
 tail_count = 1
 arm = bpy.data.armatures[rig]
 bone = arm.edit_bones['armTwist_3_L']
-print(bone)
+# print(bone)
 bone.head = at_3_L_head
 bone.tail = at_3_L_tail
 
@@ -325,7 +325,7 @@ head_count = 0
 tail_count = 1
 arm = bpy.data.armatures[rig]
 bone = arm.edit_bones['armTwist_1_R']
-print(bone)
+# print(bone)
 bone.head = at_1_R_head
 bone.tail = at_1_R_tail
 
@@ -337,7 +337,7 @@ head_count = 0
 tail_count = 1
 arm = bpy.data.armatures[rig]
 bone = arm.edit_bones['armTwist_2_R']
-print(bone)
+# print(bone)
 bone.head = at_2_R_head
 bone.tail = at_2_R_tail
 
@@ -349,7 +349,7 @@ head_count = 0
 tail_count = 1
 arm = bpy.data.armatures[rig]
 bone = arm.edit_bones['armTwist_3_R']
-print(bone)
+# print(bone)
 bone.head = at_3_R_head
 bone.tail = at_3_R_tail
 

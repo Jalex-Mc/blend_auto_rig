@@ -22,6 +22,10 @@ r = Rigging_Functions()
 
 rig = 'Female Transfer Rig'
 
+a_rig = bpy.data.objects[rig]
+
+a_rig['rig_id'] = "universal rig"
+
 # inspect.getfullargspec(r.set_mode)
 
 # Makes sure the scene's orientation transformation is set to Global

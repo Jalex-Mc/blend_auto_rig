@@ -208,8 +208,8 @@ class Rigging_Functions:
     def copy_transforms(self, rig_name, bone_name, influence, subtarget):
         bone = self.select_bone_as_active_pose(rig_name, bone_name)
         copy = bone.constraints.new(type='COPY_TRANSFORMS')
-        target = bpy.data.objects[rig_name]
-        copy.target = target
+        # target = bpy.data.objects[rig_name]
+        copy.target = bpy.data.objects[rig_name]
         # print(f'{copy}{influence}{subtarget}{target}')
         copy.influence = influence
         copy.subtarget = subtarget
