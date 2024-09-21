@@ -22,230 +22,541 @@ r.set_mode('OBJECT')
 r.remove_object_selection()
 r.remove_edit_and_arm_selection(rig)
 
-### deform & collections ###
+## adding fk/ik switch to legs
 
-deform_list = [
-    "head",
-    "neck_2",
-    "neck_1",
-    "scapula_L",
-    "scapula_R",
-    "clavicle_L",
-    "clavicle_R",
-    "breast_L",
-    "breast_R",
-    "spine_3",
-    "spine_2",
-    "spine_1",
-    "pelvis_L",
-    "pelvis_R",
-    "humerus_L",
-    "humerus_R",
-    "forearm_L",
-    "forearm_R",
-    "armTwist_1_L",
-    "armTwist_1_R",
-    "armTwist_2_L",
-    "armTwist_2_R",
-    "armTwist_3_L",
-    "armTwist_3_R",
-    "hand_L",
-    "hand_R",
-    "hipTwist",
-    "butt_R",
-    "butt_L",
-    "femur_L",
-    "femurDeform_L",
-    "femurDeform_R",
-    "femur_R",
-    "tibia_L",
-    "tibia_R",
-    "kneeBendDeform_L",
-    "kneeBendDeform_R",
-    "footFK_L",
-    "footFK_R",
-    "bigToe_1_L",
-    "bigToe_1_R",
-    "bigToe_2_L",
-    "bigToe_2_R",
-    "indexToe_1_L",
-    "indexToe_1_R",
-    "indexToe_2_L",
-    "indexToe_2_R",
-    "indexToe_3_L",
-    "indexToe_3_R",
-    "midToe_1_L",
-    "midToe_1_R",
-    "midToe_2_L",
-    "midToe_2_R",
-    "midToe_3_L",
-    "midToe_3_R",
-    "ringToe_1_L",
-    "ringToe_1_R",
-    "ringToe_2_L",
-    "ringToe_2_R",
-    "ringToe_3_L",
-    "ringToe_3_R",
-    "pinkyToe_1_L",
-    "pinkyToe_1_R",
-    "pinkyToe_2_L",
-    "pinkyToe_2_R",
-    "pinkyToe_3_L",
-    "pinkyToe_3_R",
-    "index_1_L",
-    "index_2_L",
-    "index_3_L",
-    "index_4_L",
-    "index_1_R",
-    "index_2_R",
-    "index_3_R",
-    "index_4_R",
-    "middle_1_R",
-    "middle_2_R",
-    "middle_3_R",
-    "middle_4_R",
-    "middle_1_L",
-    "middle_2_L",
-    "middle_3_L",
-    "middle_4_L",
-    "ring_1_R",
-    "ring_2_R",
-    "ring_3_R",
-    "ring_4_R",
-    "ring_1_L",
-    "ring_2_L",
-    "ring_3_L",
-    "ring_4_L",
-    "pinky_1_L",
-    "pinky_2_L",
-    "pinky_3_L",
-    "pinky_4_L",
-    "pinky_1_R",
-    "pinky_2_R",
-    "pinky_3_R",
-    "pinky_4_R",
-    "thumb_1_L",
-    "thumb_2_L",
-    "thumb_3_L",
-    "thumb_1_R",
-    "thumb_2_R",
-    "thumb_3_R",
-]
+# r.duplicate_bone(rig, 'femur_L', 'femur_IK_L')
+# r.duplicate_bone(rig, 'femur_L', 'femur_FK_L')
+# r.duplicate_bone(rig, 'tibia_L', 'tibia_IK_L')
+# r.duplicate_bone(rig, 'tibia_L', 'tibia_FK_L')
 
-CTRL = ['root', 'head', 'neck_2', 'neck_1', 'neckHead', 'backCTRL','clavicle_L', 'clavicle_R', 'spine_3', 'spine_2', 'spine_1', 'pelvis', 'hipTwist', 'humerus_FK_L', 'humerus_FK_R', 'elbowPole_L', 'elbowPole_R', 'forearm_FK_L', 'forearm_FK_R', 'hand_FK_L', 'hand_FK_R', 'hand_IK_L', 'hand_IK_R', 'index_1_L', 'index_2_L', 'index_3_L', 'index_4_L', 'index_1_R', 'index_2_R', 'index_3_R', 'index_4_R', 'indexRotation_L', 'indexRotation_R', 'middle_1_R', 'middle_2_R', 'middle_3_R', 'middle_4_R', 'middle_1_L', 'middle_2_L', 'middle_3_L', 'middle_4_L', 'middleRotation_L', 'middleRotation_R', 'ring_1_R', 'ring_2_R', 'ring_3_R', 'ring_4_R', 'ring_1_L', 'ring_2_L', 'ring_3_L', 'ring_4_L', 'ringRotation_L', 'ringRotation_R', 'pinky_1_L', 'pinky_2_L', 'pinky_3_L', 'pinky_4_L', 'pinky_1_R', 'pinky_2_R', 'pinky_3_R', 'pinky_4_R', 'pinkyRotation_L', 'pinkyRotation_R', 'thumb_1_L', 'thumb_2_L', 'thumb_3_L', 'thumb_1_R', 'thumb_2_R', 'thumb_3_R', 'thumbRotation_L', 'thumbRotation_R', 'footRollCTRL_L', 'footRollCTRL_R', 'footIK_L', 'footIK_R', 'heelHeight_L', 'heelHeight_R', 'heelPosition_L', 'heelPosition_R', 'toesIK_L', 'toesIK_R', 'bigToeRotation_L', 'bigToeRotation_R', 'indexToeRotation_L', 'indexToeRotation_R', 'midToeRotation_L', 'midToeRotation_R', 'ringToeRotation_L', 'ringToeRotation_R', 'pinkyToeRotation_L', 'pinkyToeRotation_R', 'bigToe_1_L', 'bigToe_1_R', 'bigToe_2_L', 'bigToe_2_R', 'indexToe_1_L', 'indexToe_1_R', 'indexToe_2_L', 'indexToe_2_R', 'indexToe_3_L', 'indexToe_3_R', 'midToe_1_L', 'midToe_1_R', 'midToe_2_L', 'midToe_2_R', 'midToe_3_L', 'midToe_3_R', 'ringToe_1_L', 'ringToe_1_R', 'ringToe_2_L', 'ringToe_2_R', 'ringToe_3_L', 'ringToe_3_R', 'pinkyToe_1_L', 'pinkyToe_1_R', 'pinkyToe_2_L', 'pinkyToe_2_R', 'pinkyToe_3_L', 'pinkyToe_3_R']
-ACCESSORY = ['clavicle_MCH_L', 'clavicle_MCH_R', 'RBF_Upperarm_L', 'RBF_Upperarm_R', 'RBF_leg_L', 'RBF_leg_R', 'IKpoleHelpers_1_L', 'IKpoleHelpers_1_R', 'IKpoleHelpers_2_L', 'IKpoleHelpers_2_R', 'IKpoleHelpers_3_L', 'IKpoleHelpers_3_R', 'MCH_foot_L', 'MCH_foot_R', 'MCH_footRoll_1_L', 'MCH_footRoll_1_R', 'MCH_footRoll_3_L', 'MCH_footRoll_3_R', 'MCH_footRoll_2_L', 'MCH_footRoll_2_R', 'toes_L', 'toes_R']
-FK = ['humerus_FK_L', 'humerus_FK_R', 'forearm_FK_L', 'forearm_FK_R', 'armTwist_1_FK_L', 'armTwist_1_FK_R', 'armTwist_2_FK_L', 'armTwist_2_FK_R', 'armTwist_3_FK_L', 'armTwist_3_FK_R', 'hand_FK_L', 'hand_FK_R', 'footFK_L', 'footFK_R']
-IK = ['humerus_IK_L', 'humerus_IK_R', 'elbowPole_L', 'elbowPole_R', 'forearm_IK_L', 'forearm_IK_R', 'armTwist_1_IK_L', 'armTwist_1_IK_R', 'armTwist_2_IK_L', 'armTwist_2_IK_R', 'armTwist_3_IK_L', 'armTwist_3_IK_R', 'hand_IK_L', 'hand_IK_R', 'footIK_L', 'footIK_R', 'toesIK_L', 'toesIK_R']
-RBF = ['clavicle_MCH_L', 'clavicle_MCH_R', 'RBF_Upperarm_L', 'RBF_Upperarm_R', 'RBF_leg_L', 'RBF_leg_R']
-bones_to_assign = {'Deform': deform_list, 'CTRL': CTRL, 'ACCESSORY': ACCESSORY, 'FK': FK, 'IK': IK, 'RBF': RBF}
+r.duplicate_bones(rig, 'femur_L', 'femur_IK_L', 'pelvis_L', False, r.bone_roll(rig, 'femur_L'), True)
+r.duplicate_bones(rig, 'femur_L', 'femur_FK_L', 'pelvis_L', False, r.bone_roll(rig, 'femur_L'), True)
+r.duplicate_bones(rig, 'tibia_L', 'tibia_IK_L', 'femur_IK_L', False, r.bone_roll(rig, 'tibia_L'), True)
+r.duplicate_bones(rig, 'tibia_L', 'tibia_FK_L', 'femur_FK_L', False, r.bone_roll(rig, 'tibia_L'), True)
 
-def deform_bones(rig_name):
-    r.set_mode('OBJECT')
-    r.remove_object_selection()
-    r.object_selection(rig_name)
-    r.set_mode('EDIT')
-    arm = bpy.data.armatures[rig_name]
-    bone_list = r.rig_bone_list(rig_name)
+r.duplicate_bones(rig, 'femur_R', 'femur_IK_R', 'pelvis_R', False, r.bone_roll(rig, 'femur_R'), True)
+r.duplicate_bones(rig, 'femur_R', 'femur_FK_R', 'pelvis_R', False, r.bone_roll(rig, 'femur_R'), True)
+r.duplicate_bones(rig, 'tibia_R', 'tibia_IK_R', 'femur_IK_R', False, r.bone_roll(rig, 'tibia_R'), True)
+r.duplicate_bones(rig, 'tibia_R', 'tibia_FK_R', 'femur_FK_R', False, r.bone_roll(rig, 'tibia_R'), True)
 
-    for item in bone_list:
-        bone = arm.edit_bones[item]
-        if item in deform_list:
-            bone.use_deform = True
-        else:
-            bone.use_deform = False
+# r.parent_bone(rig, 'femur_IK_L', 'pelvis_L', False)
+# r.parent_bone(rig, 'femur_FK_L', 'pelvis_L', False)
+# r.parent_bone(rig, 'tibia_IK_L', 'femur_IK_L', False)
+# r.parent_bone(rig, 'tibia_FK_L', 'femur_FK_L', False)
 
-deform_bones(rig)
-r.create_bone_collections(rig, bones_to_assign)
+r.copy_transforms(rig, 'femur_L', 1, 'femur_IK_L')
+r.copy_transforms(rig, 'femur_L', 0, 'femur_FK_L')
+r.copy_transforms(rig, 'tibia_L', 1, 'tibia_IK_L')
+r.copy_transforms(rig, 'tibia_L', 0, 'tibia_FK_L')
 
-# rig clean up
+r.copy_transforms(rig, 'femur_R', 1, 'femur_IK_R')
+r.copy_transforms(rig, 'femur_R', 0, 'femur_FK_R')
+r.copy_transforms(rig, 'tibia_R', 1, 'tibia_IK_R')
+r.copy_transforms(rig, 'tibia_R', 0, 'tibia_FK_R')
+
+r.create_IK(rig, 'tibia_IK_L', 2, r.degree_to_radians(-0.77), 'kneePole_L', 'kneePole_L', 'MCH_foot_L', 'Female Transfer Rig')
+r.create_IK(rig, 'tibia_IK_R', 2, r.degree_to_radians(-179.24), 'kneePole_R', 'kneePole_R', 'MCH_foot_R', 'Female Transfer Rig')
+
+arm_temp = bpy.data.objects[rig]
+bone_to_alter = arm_temp.pose.bones['tibia_L']
+
+for constraint in bone_to_alter.constraints:
+    if constraint.name == "IK":
+        bone_to_alter.constraints.remove(constraint)
+
+arm_temp = bpy.data.objects[rig]
+bone_to_alter = arm_temp.pose.bones['tibia_R']
+
+for constraint in bone_to_alter.constraints:
+    if constraint.name == "IK":
+        bone_to_alter.constraints.remove(constraint)
+
+# ### Creating custom properties ###
+
+arm = bpy.data.objects[rig]
+
+arm["L_Arm FK IK"] = 1.0
+prop = arm.id_properties_ui("L_Arm FK IK")
+prop.update(soft_min=0, soft_max=1, min=0.0, max=1.0)
+
+left_arm_data_path = ["L_Arm FK IK"]
+left_arm_full_data_path = bpy.data.objects[rig]["L_Arm FK IK"]
+
+arm = bpy.data.objects[rig]
+
+arm["R_Arm FK IK"] = 1.0
+prop = arm.id_properties_ui("R_Arm FK IK")
+prop.update(soft_min=0, soft_max=1, min=0.0, max=1.0)
+
+right_arm_data_path = arm["R_Arm FK IK"]
+right_arm_full_data_path = bpy.data.objects[rig]["R_Arm FK IK"]
+
+arm["L_Leg FK IK"] = 1.0
+prop = arm.id_properties_ui("L_Leg FK IK")
+prop.update(soft_min=0, soft_max=1, min=0.0, max=1.0)
+
+left_leg_data_path = arm["L_Leg FK IK"]
+left_leg_full_data_path = bpy.data.objects[rig]["L_Leg FK IK"]
+
+arm["R_Leg FK IK"] = 1.0
+prop = arm.id_properties_ui("R_Leg FK IK")
+prop.update(soft_min=0, soft_max=1, min=0.0, max=1.0)
+
+right_leg_data_path = arm["R_Leg FK IK"]
+right_leg_full_data_path = bpy.data.objects[rig]["R_Leg FK IK"]
 
 
+# obj = bpy.data.objects[rig]
+# bone = obj.pose.bones['root']
+# bone["L_Arm FK IK"] = 1.0
+# prop = bone.id_properties_ui("L_Arm FK IK")
+# prop.update(soft_min=0, soft_max=1, min=0.0, max=1.0)
 
-# r.lock_rotation(rig, 'humerus_FK_L', y=True, z=True)
-# r.lock_rotation(rig, 'humerus_FK_R', y=True, z=True)
+# left_arm_data_path = bone["L_Arm FK IK"]
+# #correct data path for driver = pose.bones["Bone.001"]["FK IK"]
+# left_arm_full_data_path = bpy.data.objects[rig].pose.bones["root"]["L_Arm FK IK"]
 
-left_hand_rotation_bones = ['thumbRotation_L', 'indexRotation_L', 'middleRotation_L', 'ringRotation_L', 'pinkyRotation_L']
+# obj = bpy.data.objects[rig]
+# bone = obj.pose.bones['root']
+# bone["R_Arm FK IK"] = 1.0
+# prop = bone.id_properties_ui("R_Arm FK IK")
+# prop.update(soft_min=0, soft_max=1, min=0.0, max=1.0)
 
-for bone in left_hand_rotation_bones:
-    r.set_mode('OBJECT')
-    r.remove_edit_and_arm_selection(rig)
-    r.set_mode('OBJECT')
-    r.remove_object_selection()
-    r.object_selection(rig)
-    r.set_mode('EDIT')
+# left_arm_data_path = bone["R_Arm FK IK"]
+# #correct data path for driver = pose.bones["Bone.001"]["FK IK"]
+# left_arm_full_data_path = bpy.data.objects[rig].pose.bones["root"]["R_Arm FK IK"]
+
+# obj = bpy.data.objects[rig]
+# bone = obj.pose.bones['root']
+# bone["L_Leg FK IK"] = 1.0
+# prop = bone.id_properties_ui("L_Leg FK IK")
+# prop.update(soft_min=0, soft_max=1, min=0.0, max=1.0)
+
+# left_arm_data_path = bone["L_Leg FK IK"]
+# #correct data path for driver = pose.bones["Bone.001"]["FK IK"]
+# left_arm_full_data_path = bpy.data.objects[rig].pose.bones["root"]["L_Leg FK IK"]
+
+# obj = bpy.data.objects[rig]
+# bone = obj.pose.bones['root']
+# bone["R_Leg FK IK"] = 1.0
+# prop = bone.id_properties_ui("R_Leg FK IK")
+# prop.update(soft_min=0, soft_max=1, min=0.0, max=1.0)
+
+# left_arm_data_path = bone["R_Leg FK IK"]
+# #correct data path for driver = pose.bones["Bone.001"]["FK IK"]
+# left_arm_full_data_path = bpy.data.objects[rig].pose.bones["root"]["R_Leg FK IK"]
+
+### Creating Drivers for FK IK Switch ###
+
+FK = ['humerus_FK_L', 'humerus_FK_R', 'forearm_FK_L', 'forearm_FK_R', 'armTwist_1_FK_L', 'armTwist_1_FK_R', 'armTwist_2_FK_L', 'armTwist_2_FK_R', 'armTwist_3_FK_L', 'armTwist_3_FK_R', 'hand_FK_L', 'hand_FK_R', 'femur_FK_L', "femur_FK_R", "tibia_FK_L", "tibia_FK_R"]
+IK = ['humerus_IK_L', 'humerus_IK_R', 'forearm_IK_L', 'forearm_IK_R', 'armTwist_1_IK_L', 'armTwist_1_IK_R', 'armTwist_2_IK_L', 'armTwist_2_IK_R', 'armTwist_3_IK_L', 'armTwist_3_IK_R', 'hand_IK_L', 'hand_IK_R', "femur_IK_L", "femur_IK_R", "tibia_IK_L", "tibia_IK_R"]
+deform_arm_list = ["humerus_L", "humerus_R", "forearm_L",  "forearm_R", "armTwist_1_L", "armTwist_1_R", "armTwist_2_L", "armTwist_2_R", "armTwist_3_L","armTwist_3_R", "hand_L", "hand_R", "femur_L", "femur_R", "tibia_L", "tibia_R"]
+deform_leg_list = ["femur_L", "femur_R", "tibia_L", "tibia_R"]
+deform_foot_list = ["footFK_L", "footFK_R", "toes_L", "toes_R"]
+
+armature_obj = bpy.data.objects.get(rig)
+# armature_obj = bpy.data.objects.get('female transfer rig')["L_Arm FK IK"]
+
+for item in deform_arm_list:
+    # Copy Transforms.001 - IK
+    # Copy Transforms - FK
+    ##IK below - 
+    if "_L" in item:
+        bone = armature_obj.pose.bones.get(item)
+        constraint_name = "Copy Transforms.001"
+        constraint = bone.constraints.get(constraint_name)
+        driver = constraint.driver_add("influence")
+        driver2 = driver.driver
+        driver2.type = 'AVERAGE'
+        var = driver2.variables.new()
+        var.name = 'var'
+        target = var.targets[0]
+        target.id = bpy.data.objects.get(rig)
+        # target.data_path = 'pose.bones["root"]["L_Arm FK IK"]'
+        target.data_path = '["L_Arm FK IK"]'
+        driver.modifiers.remove(driver.modifiers[0])
+
+        driver.keyframe_points.insert(0,1)
+        driver.keyframe_points.insert(1,0)
+        point1 = driver.keyframe_points[0]
+        point2 = driver.keyframe_points[1]
+
+        #point1.interpolation = "SINE"
+        point1.easing = "EASE_OUT"
+        point1.handle_left = (-0.333333, 1.33333)
+        point1.handle_right = (0.333333, 0.666667)
+        #point2.interpolation = "SINE"
+        point2.handle_left = (0.666667, 0.333333)
+        point2.handle_right = (1.33333, -0.333333)
+
+        ##IK below - 
+        constraint_name = "Copy Transforms"
+        constraint = bone.constraints.get(constraint_name)
+        driver = constraint.driver_add("influence")
+        driver2 = driver.driver
+        driver2.type = 'AVERAGE'
+        var = driver2.variables.new()
+        var.name = 'var'
+        target = var.targets[0]
+        target.id = bpy.data.objects.get(rig)
+        target.data_path = '["L_Arm FK IK"]'
+        driver.modifiers.remove(driver.modifiers[0])
+
+        driver.keyframe_points.insert(0,0)
+        driver.keyframe_points.insert(1,1)
+
+        point1 = driver.keyframe_points[0]
+        point2 = driver.keyframe_points[1]
+
+        #point1.interpolation = "SINE"
+        point1.easing = "EASE_OUT"
+        point1.handle_left = (-0.333333, -0.333333)
+        point1.handle_right = (0.333333, 0.333333)
+
+        #point2.interpolation = "SINE"
+        point2.handle_left = (0.666667, 0.666667)
+        point2.handle_right = (1.33333, 1.33333)
+
+    if "_R" in item:
+        bone = armature_obj.pose.bones.get(item)
+        constraint_name = "Copy Transforms.001"
+        constraint = bone.constraints.get(constraint_name)
+        driver = constraint.driver_add("influence")
+        driver2 = driver.driver
+        driver2.type = 'AVERAGE'
+        var = driver2.variables.new()
+        var.name = 'var'
+        target = var.targets[0]
+        target.id = bpy.data.objects.get(rig)
+        target.data_path = '["R_Arm FK IK"]'
+        driver.modifiers.remove(driver.modifiers[0])
+
+        driver.keyframe_points.insert(0,1)
+        driver.keyframe_points.insert(1,0)
+        point1 = driver.keyframe_points[0]
+        point2 = driver.keyframe_points[1]
+
+        #point1.interpolation = "SINE"
+        point1.easing = "EASE_OUT"
+        point1.handle_left = (-0.333333, 1.33333)
+        point1.handle_right = (0.333333, 0.666667)
+        #point2.interpolation = "SINE"
+        point2.handle_left = (0.666667, 0.333333)
+        point2.handle_right = (1.33333, -0.333333)
+
+        ##IK below - 
+        constraint_name = "Copy Transforms"
+        constraint = bone.constraints.get(constraint_name)
+        driver = constraint.driver_add("influence")
+        driver2 = driver.driver
+        driver2.type = 'AVERAGE'
+        var = driver2.variables.new()
+        var.name = 'var'
+        target = var.targets[0]
+        target.id = bpy.data.objects.get(rig)
+        target.data_path = '["R_Arm FK IK"]'
+        driver.modifiers.remove(driver.modifiers[0])
+
+        driver.keyframe_points.insert(0,0)
+        driver.keyframe_points.insert(1,1)
+
+        point1 = driver.keyframe_points[0]
+        point2 = driver.keyframe_points[1]
+
+        #point1.interpolation = "SINE"
+        point1.easing = "EASE_OUT"
+        point1.handle_left = (-0.333333, -0.333333)
+        point1.handle_right = (0.333333, 0.333333)
+
+        #point2.interpolation = "SINE"
+        point2.handle_left = (0.666667, 0.666667)
+        point2.handle_right = (1.33333, 1.33333)
+
+for item in deform_leg_list:
+    # Copy Transforms.001 - IK
+    # Copy Transforms - FK
+    ##IK below - 
+    if "_L" in item:
+        bone = armature_obj.pose.bones.get(item)
+        constraint_name = "Copy Transforms.001"
+        constraint = bone.constraints.get(constraint_name)
+        driver = constraint.driver_add("influence")
+        driver2 = driver.driver
+        driver2.type = 'AVERAGE'
+        var = driver2.variables.new()
+        var.name = 'var'
+        target = var.targets[0]
+        target.id = bpy.data.objects.get(rig)
+        # target.data_path = 'pose.bones["root"]["L_Arm FK IK"]'
+        target.data_path = '["L_Leg FK IK"]'
+        # driver.modifiers.remove(driver.modifiers[0])
+
+        driver.keyframe_points.insert(0,1)
+        driver.keyframe_points.insert(1,0)
+        point1 = driver.keyframe_points[0]
+        point2 = driver.keyframe_points[1]
+
+        #point1.interpolation = "SINE"
+        point1.easing = "EASE_OUT"
+        point1.handle_left = (-0.333333, 1.33333)
+        point1.handle_right = (0.333333, 0.666667)
+        #point2.interpolation = "SINE"
+        point2.handle_left = (0.666667, 0.333333)
+        point2.handle_right = (1.33333, -0.333333)
+
+        ##IK below - 
+        constraint_name = "Copy Transforms"
+        constraint = bone.constraints.get(constraint_name)
+        driver = constraint.driver_add("influence")
+        driver2 = driver.driver
+        driver2.type = 'AVERAGE'
+        var = driver2.variables.new()
+        var.name = 'var'
+        target = var.targets[0]
+        target.id = bpy.data.objects.get(rig)
+        target.data_path = '["L_Arm FK IK"]'
+        # driver.modifiers.remove(driver.modifiers[0])
+
+        driver.keyframe_points.insert(0,0)
+        driver.keyframe_points.insert(1,1)
+
+        point1 = driver.keyframe_points[0]
+        point2 = driver.keyframe_points[1]
+
+        #point1.interpolation = "SINE"
+        point1.easing = "EASE_OUT"
+        point1.handle_left = (-0.333333, -0.333333)
+        point1.handle_right = (0.333333, 0.333333)
+
+        #point2.interpolation = "SINE"
+        point2.handle_left = (0.666667, 0.666667)
+        point2.handle_right = (1.33333, 1.33333)
+
+    if "_R" in item:
+        bone = armature_obj.pose.bones.get(item)
+        constraint_name = "Copy Transforms.001"
+        constraint = bone.constraints.get(constraint_name)
+        driver = constraint.driver_add("influence")
+        driver2 = driver.driver
+        driver2.type = 'AVERAGE'
+        var = driver2.variables.new()
+        var.name = 'var'
+        target = var.targets[0]
+        target.id = bpy.data.objects.get(rig)
+        target.data_path = '["R_Leg FK IK"]'
+        # driver.modifiers.remove(driver.modifiers[0])
+
+        driver.keyframe_points.insert(0,1)
+        driver.keyframe_points.insert(1,0)
+        point1 = driver.keyframe_points[0]
+        point2 = driver.keyframe_points[1]
+
+        #point1.interpolation = "SINE"
+        point1.easing = "EASE_OUT"
+        point1.handle_left = (-0.333333, 1.33333)
+        point1.handle_right = (0.333333, 0.666667)
+        #point2.interpolation = "SINE"
+        point2.handle_left = (0.666667, 0.333333)
+        point2.handle_right = (1.33333, -0.333333)
+
+        ##IK below - 
+        constraint_name = "Copy Transforms"
+        constraint = bone.constraints.get(constraint_name)
+        driver = constraint.driver_add("influence")
+        driver2 = driver.driver
+        driver2.type = 'AVERAGE'
+        var = driver2.variables.new()
+        var.name = 'var'
+        target = var.targets[0]
+        target.id = bpy.data.objects.get(rig)
+        target.data_path = '["R_Arm FK IK"]'
+        # driver.modifiers.remove(driver.modifiers[0])
+
+        driver.keyframe_points.insert(0,0)
+        driver.keyframe_points.insert(1,1)
+
+        point1 = driver.keyframe_points[0]
+        point2 = driver.keyframe_points[1]
+
+        #point1.interpolation = "SINE"
+        point1.easing = "EASE_OUT"
+        point1.handle_left = (-0.333333, -0.333333)
+        point1.handle_right = (0.333333, 0.333333)
+
+        #point2.interpolation = "SINE"
+        point2.handle_left = (0.666667, 0.666667)
+        point2.handle_right = (1.33333, 1.33333)
+
+for item in deform_foot_list:
+    # Copy Transforms.001 - IK
+    # Copy Transforms - FK
+    ##IK below - 
+    if "_L" in item:
+        bone = armature_obj.pose.bones.get(item)
+        constraint_name = "Copy Rotation"
+        constraint = bone.constraints.get(constraint_name)
+        driver = constraint.driver_add("influence")
+        driver2 = driver.driver
+        driver2.type = 'AVERAGE'
+        var = driver2.variables.new()
+        var.name = 'var'
+        target = var.targets[0]
+        target.id = bpy.data.objects.get(rig)
+        # target.data_path = 'pose.bones["root"]["L_Arm FK IK"]'
+        target.data_path = '["L_Leg FK IK"]'
+        # driver.modifiers.remove(driver.modifiers[0])
+
+        driver.keyframe_points.insert(0,1)
+        driver.keyframe_points.insert(1,0)
+        point1 = driver.keyframe_points[0]
+        point2 = driver.keyframe_points[1]
+
+        #point1.interpolation = "SINE"
+        point1.easing = "EASE_OUT"
+        point1.handle_left = (-0.333333, 1.33333)
+        point1.handle_right = (0.333333, 0.666667)
+        #point2.interpolation = "SINE"
+        point2.handle_left = (0.666667, 0.333333)
+        point2.handle_right = (1.33333, -0.333333)
+
+    if "_R" in item:
+        bone = armature_obj.pose.bones.get(item)
+        constraint_name = "Copy Rotation"
+        constraint = bone.constraints.get(constraint_name)
+        driver = constraint.driver_add("influence")
+        driver2 = driver.driver
+        driver2.type = 'AVERAGE'
+        var = driver2.variables.new()
+        var.name = 'var'
+        target = var.targets[0]
+        target.id = bpy.data.objects.get(rig)
+        target.data_path = '["R_Leg FK IK"]'
+        # driver.modifiers.remove(driver.modifiers[0])
+
+        driver.keyframe_points.insert(0,1)
+        driver.keyframe_points.insert(1,0)
+        point1 = driver.keyframe_points[0]
+        point2 = driver.keyframe_points[1]
+
+        #point1.interpolation = "SINE"
+        point1.easing = "EASE_OUT"
+        point1.handle_left = (-0.333333, 1.33333)
+        point1.handle_right = (0.333333, 0.666667)
+        #point2.interpolation = "SINE"
+        point2.handle_left = (0.666667, 0.333333)
+        point2.handle_right = (1.33333, -0.333333)
+
+
+#####
+
+change_deform = ["tibia_IK_L", "tibia_FK_L", "tibia_IK_R", "tibia_FK_R", "femur_IK_L", "femur_FK_L", "femur_IK_R", "femur_IK_L"]
+
+arm_again = bpy.data.armatures[rig]
+
+r.set_mode("EDIT")
+
+for item in change_deform:
     arm = bpy.data.armatures[rig]
-    bone = arm.edit_bones[bone]
-    bone.roll *= -1 
-
-r.limit_rotation(rig, 'hipTwist', max_x=r.degree_to_radians(25), min_x=r.degree_to_radians(-35), max_y=r.degree_to_radians(15), min_y=r.degree_to_radians(-15), max_z=r.degree_to_radians(30), min_z=r.degree_to_radians(-20), limit_x=True, limit_y=True,limit_z=True, owner_space='LOCAL')
-
-## bone color ##
-
-red = ['head', 'neck_2', 'neck_1', 'spine_3', 'spine_2', 'spine_1', 'hand_IK_L']
-blue = ['hand_IK_R']
-theme11 = ['humerus_FK_R', 'forearm_FK_R','hand_FK_R', 'pelvis']
-theme12 = ['footIK_L', 'footIK_R', ]
-yellow = ['hipTwist', 'root']
-neon_green = ['neckHead', 'backCTRL']
-orange = ['elbowPole_L', 'kneePole_L']
-bluegreen = ['elbowPole_R', 'kneePole_R']
-purple = ['heelHeight_L', 'heelHeight_R', 'bigToe_1_L', 'bigToe_1_R', 'bigToe_2_L', 'bigToe_2_R', 'indexToe_1_L', 'indexToe_1_R', 'indexToe_2_L', 'indexToe_2_R', 'indexToe_3_L', 'indexToe_3_R', 'midToe_1_L', 'midToe_1_R', 'midToe_2_L', 'midToe_2_R', 'midToe_3_L', 'midToe_3_R', 'ringToe_1_L', 'ringToe_1_R', 'ringToe_2_L', 'ringToe_2_R', 'ringToe_3_L', 'ringToe_3_R', 'pinkyToe_1_L', 'pinkyToe_1_R', 'pinkyToe_2_L', 'pinkyToe_2_R', 'pinkyToe_3_L', 'pinkyToe_3_R']
-pink = ['footRollCTRL_L', 'footRollCTRL_R', 'toesIK_L', 'toesIK_R', 'bigToeRotation_L', 'bigToeRotation_R', 'indexToeRotation_L', 'indexToeRotation_R', 'midToeRotation_L', 'midToeRotation_R', 'ringToeRotation_L', 'ringToeRotation_R', 'pinkyToeRotation_L', 'pinkyToeRotation_R']
-green = ['clavicle_L', 'clavicle_R', 'humerus_FK_L', 'forearm_FK_L', 'hand_FK_L', 'heelPosition_L', 'heelPosition_R']
-
-r.set_mode('OBJECT')
-r.remove_edit_and_arm_selection(rig)
-r.set_mode('OBJECT')
-r.remove_object_selection()
-r.object_selection(rig)
-obj = bpy.context.active_object
-
-if obj and obj.type == 'ARMATURE':
-    # Iterate through the bones
-    for bone in obj.pose.bones:
-        if bone.name in red:
-            bone.color.palette = 'THEME01'
-        if bone.name in blue:
-             bone.color.palette = 'THEME04'
-        if bone.name in theme11:
-            bone.color.palette = 'THEME11'
-        if bone.name in theme12:
-            bone.color.palette = 'THEME12'
-        if bone.name in yellow:
-            bone.color.palette = 'THEME09'
-        if bone.name in neon_green:
-            bone.color.palette = 'THEME03'
-        if bone.name in orange:
-            bone.color.palette = 'THEME02'
-        if bone.name in bluegreen:
-            bone.color.palette = 'THEME08'
-        if bone.name in purple:
-            bone.color.palette = 'THEME06'
-        if bone.name in pink:
-            bone.color.palette = 'THEME05'
-        if bone.name in green:
-            bone.color.palette = 'THEME15'
+    bone = arm.edit_bones[item]
+    bone.use_deform = False
 
 
-## file clean up ##
+# ## CLEAN UP and Bug fixes
 
-r.set_mode('OBJECT')
-r.remove_object_selection()
-r.remove_edit_and_arm_selection(rig)
-r.set_mode('OBJECT')
-r.remove_object_selection()
+arm = bpy.data.armatures[rig]
+bone_for_roll = arm.edit_bones['thumbRotation_L']
+bone_for_roll.roll = r.bone_roll(rig, 'thumb_2_L')
+
+bone_for_roll = arm.edit_bones['thumbRotation_R']
+bone_for_roll.roll = r.bone_roll(rig, 'thumb_2_R')
+
+bone = r.select_bone_as_active_pose(rig, 'clavicle_L')
+bone.constraints[-1].mix_mode = "AFTER"
+
+bone = r.select_bone_as_active_pose(rig, 'clavicle_R')
+bone.constraints[-1].mix_mode = "AFTER"
+
+r.lock_rotation(rig, 'toesIK_L', y=True, z=True)
+r.lock_rotation(rig, 'toesIK_R', y=True, z=True)
+
+r.parent_bone(rig, 'hand_IK_L', 'root', False)
+r.parent_bone(rig, 'hand_IK_R', 'root', False)
+
+r.parent_bone(rig, 'pelvis_L', 'hipTwist', False)
+r.parent_bone(rig, 'pelvis_R', 'hipTwist', False)
+
+arm = bpy.data.armatures[rig]
+bone = arm.edit_bones['kneePole_L']
+bone.parent = None
+bone_roll_fix = bone.roll
+bone = arm.edit_bones['kneePole_R']
+bone.parent = None
+bone.roll = bone_roll_fix
+
+bone = arm.edit_bones['footIK_L']
+foot_ik_roll_fix = -bone.roll
+bone = arm.edit_bones['footIK_R']
+bone.roll = foot_ik_roll_fix
+
+bone = arm.edit_bones['toesIK_L']
+bone.roll = 0
+
+bone = r.select_bone_as_active_pose(rig, 'neck_1')
+bone.constraints[-1].mix_mode = "AFTER"
+
+bone = r.select_bone_as_active_pose(rig, 'head')
+bone.constraints[-1].mix_mode = "AFTER"
+
+r.limit_rotation(rig, 'clavicle_L', max_z=r.degree_to_radians(30), min_z=r.degree_to_radians(-9), limit_z=True, owner_space='LOCAL')
+r.limit_rotation(rig, 'clavicle_R', max_z=r.degree_to_radians(9), min_z=r.degree_to_radians(-30), limit_z=True, owner_space='LOCAL')
+
+## fist control ##
 
 
-col = bpy.data.collections.get("Collection")
-if col:
-   for obj in col.objects:
-        if 'Empty' in obj.name:
-           print(obj.name)
-           obj.select_set(True)
-        else:
-           print(obj.name)
-bpy.ops.object.delete()
 
-r.remove_object_selection()
+r.set_mode('POSE')
+
+
+
+
+# ## adding actions for clavicle and breast follow
+# ## need to add this to the first script
+
+# # r.anim_action(rig, 'scapula_L', 'Clavicle_L_rotation_pose_1', 'Elbow_actions_L', 0, 20, 1.21591, 1.27059,transform_channel='LOCATION_Z')
+# # r.anim_action(rig, 'scapula_L', 'Clavicle_L_rotation_pose_2', 'Elbow_actions_L', 0, 40, 1.27059, 1.76191,transform_channel='LOCATION_Z')
+# # r.anim_action(rig, 'scapula_L', 'Clavicle forward_L', 'Elbow_actions_L', 0, 20, 0.041209, -0.182764,transform_channel='LOCATION_Y')
+# # r.anim_action(rig, 'scapula_L', 'Clavicle backward_L', 'Elbow_actions_L', 0, 20, 0.041209, 0.284233,transform_channel='LOCATION_Y')
+
+# # r.anim_action(rig, 'scapula_R', 'Clavicle_R_rotation_pose_1', 'Elbow_actions_R', 0, 20, 1.21591, 1.27059,transform_channel='LOCATION_Z')
+# # r.anim_action(rig, 'scapula_R', 'Clavicle_R_rotation_pose_2', 'Elbow_actions_R', 0, 40, 1.27059, 1.76191,transform_channel='LOCATION_Z')
+# # r.anim_action(rig, 'scapula_R', 'Clavicle forward_R', 'Elbow_actions_R', 0, 20, 0.041209, -0.182764,transform_channel='LOCATION_Y')
+# # r.anim_action(rig, 'scapula_R', 'Clavicle backward_R', 'Elbow_actions_R', 0, 20, 0.041209, 0.284233,transform_channel='LOCATION_Y')
+
+# # r.anim_action(rig, 'breast_L', 'breast_follow_up_L', 'Elbow_actions_L', 0, 20, 1.27059, 1.76191,transform_channel='LOCATION_Z')
+# # r.anim_action(rig, 'breast_L', 'breast_follow_down_L', 'Elbow_actions_L', 0, 20, 1.27059, 1.21591,transform_channel='LOCATION_Z')
+# # r.anim_action(rig, 'breast_L', 'breast_follow_back_L', 'Elbow_actions_L', 0, 20, 0.041209, 0.32314,transform_channel='LOCATION_Y')
+
+# # r.anim_action(rig, 'breast_R', 'breast_follow_up_R', 'Elbow_actions_R', 0, 20, 1.27059, 1.76191,transform_channel='LOCATION_Z')
+# # r.anim_action(rig, 'breast_R', 'breast_follow_down_R', 'Elbow_actions_R', 0, 20, 1.27059, 1.21591,transform_channel='LOCATION_Z')
+# # r.anim_action(rig, 'breast_R', 'breast_follow_back_R', 'Elbow_actions_R', 0, 20, 0.041209, 0.32314,transform_channel='LOCATION_Y')
+
+# # r.set_mode('OBJECT')
+# # r.remove_object_selection()
+# # r.object_selection(rig)
+# # bone = r.select_bone_as_active_pose(rig, 'scapula_L')
+# # action = bone.constraints.new(type='ACTION')
+# # target = bpy.data.objects['Elbow_actions_L']
+# # action.action = bpy.data.actions['Clavicle_l_rotation_pose_1']
+# # action.frame_end = 20
+# # action.frame_start = 0
+# # action.max = 1.21591
+# # action.min = 1.27059
+# # # action.mix_mode = 'LOCATION_Z'
+# # action.subtarget = ""
+# # action.target = target
+# # # action.use_eval = use_eval
+# # action.transform_channel = 'LOCATION_Z'
+# # # action.use_bone_object_action = 'Clavicle_1_rotation_pose_1'
 
 sys.path.remove(module_dir)
+

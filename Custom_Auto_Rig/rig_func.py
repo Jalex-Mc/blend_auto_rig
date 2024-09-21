@@ -507,12 +507,15 @@ class Rigging_Functions:
         self.set_mode('OBJECT')
         self.object_selection(rig_name)
         self.set_mode('EDIT')
+        # self.select_bone_as_active_edit(rig_name, bone_name)
         arm = bpy.data.objects[rig_name]
-        bone = arm.data.edit_bones[bone_name]
+        # bone = arm.data.edit_bones[bone_name]
+        bone = arm.data.edit_bones.get(bone_name)
         bone.select=True
         bone.select_head = True
         bone.select_tail = True
         arm.data.edit_bones.active = bone
+        # arm.data.edit_bones.active = bone
         bpy.ops.armature.duplicate()
         new_bone = bpy.context.selected_editable_bones
         new_bone[0].name = new_bone_name
