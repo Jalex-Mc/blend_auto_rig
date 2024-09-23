@@ -98,10 +98,12 @@ class Step_5(bpy.types.Operator):
     bl_label = "Run autorig script 5"
     
     filename_ctrls = "O:/Onedrive/Python_Blender/blend_auto_rig/Custom_Auto_Rig/Auto_Rig_CTRLS_2.py"
+    filename_ctrls_panels = "O:/Onedrive/Python_Blender/blend_auto_rig/Custom_Auto_Rig/Rig UI panel.py"
 
     def execute(self, context):
         
         exec(compile(open(self.filename_ctrls).read(), self.filename_ctrls, 'exec'))
+        exec(compile(open(self.filename_ctrls).read(), self.filename_ctrls_panels, 'exec'))
         
         return {"FINISHED"}
 

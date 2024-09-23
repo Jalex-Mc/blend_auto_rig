@@ -1331,7 +1331,7 @@ r.limit_rotation(rig, 'hipTwist', max_x=r.degree_to_radians(25), min_x=r.degree_
 
 red = ['head', 'neck_2', 'neck_1', 'spine_3', 'spine_2', 'spine_1', 'hand_IK_L']
 blue = ['hand_IK_R']
-theme11 = ['humerus_FK_R', 'forearm_FK_R','hand_FK_R', 'pelvis']
+theme11 = ['humerus_FK_R', 'forearm_FK_R','hand_FK_R', 'pelvis', 'tibia_FK_R', 'femur_FK_R']
 theme12 = ['footIK_L', 'footIK_R', ]
 yellow = ['hipTwist', 'root']
 neon_green = ['neckHead', 'backCTRL']
@@ -1339,7 +1339,7 @@ orange = ['elbowPole_L', 'kneePole_L']
 bluegreen = ['elbowPole_R', 'kneePole_R']
 purple = ['heelHeight_L', 'heelHeight_R', 'bigToe_1_L', 'bigToe_1_R', 'bigToe_2_L', 'bigToe_2_R', 'indexToe_1_L', 'indexToe_1_R', 'indexToe_2_L', 'indexToe_2_R', 'indexToe_3_L', 'indexToe_3_R', 'midToe_1_L', 'midToe_1_R', 'midToe_2_L', 'midToe_2_R', 'midToe_3_L', 'midToe_3_R', 'ringToe_1_L', 'ringToe_1_R', 'ringToe_2_L', 'ringToe_2_R', 'ringToe_3_L', 'ringToe_3_R', 'pinkyToe_1_L', 'pinkyToe_1_R', 'pinkyToe_2_L', 'pinkyToe_2_R', 'pinkyToe_3_L', 'pinkyToe_3_R']
 pink = ['footRollCTRL_L', 'footRollCTRL_R', 'toesIK_L', 'toesIK_R', 'bigToeRotation_L', 'bigToeRotation_R', 'indexToeRotation_L', 'indexToeRotation_R', 'midToeRotation_L', 'midToeRotation_R', 'ringToeRotation_L', 'ringToeRotation_R', 'pinkyToeRotation_L', 'pinkyToeRotation_R']
-green = ['clavicle_L', 'clavicle_R', 'humerus_FK_L', 'forearm_FK_L', 'hand_FK_L', 'heelPosition_L', 'heelPosition_R']
+green = ['clavicle_L', 'clavicle_R', 'humerus_FK_L', 'forearm_FK_L', 'hand_FK_L', 'heelPosition_L', 'heelPosition_R', 'tibia_FK_L', 'femur_FK_L']
 
 r.set_mode('OBJECT')
 r.remove_edit_and_arm_selection(rig)
