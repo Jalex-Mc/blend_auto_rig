@@ -1057,5 +1057,10 @@ class Rigging_Functions:
         actions = bpy.data.actions
         action_names = [action.name for action in actions]
         return action_names
+    
+    def bone_custom_shape_width(self, rig_name, bone_name, width):
+        bone = self.select_bone_as_active_pose(rig_name, bone_name)
+        bone.custom_shape_wire_width = width
+
 
 # Rigging_Functions.list_of_shapekeys('')

@@ -346,5 +346,14 @@ arm.collections.get("FK").is_visible = False
 arm.collections.get("IK").is_visible = False
 arm.collections.get("RBF").is_visible = False
 
+
+## select arm in variable 
+# arm = bpy.data.objects[rig]
+# r.object_selection(rig)
+# r.set_mode('POSE')
+
+# for bone in arm.pose.bones:
+#     r.bone_custom_shape_width(rig, bone, 2.0)
+
 sys.path.remove(module_dir)
 

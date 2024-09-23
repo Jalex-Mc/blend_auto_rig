@@ -10,6 +10,11 @@ import json
 
 scene = bpy.context.scene
 
+from rig_func import Rigging_Functions
+
+# initialize the class
+r = Rigging_Functions()
+
 def clean_select(obj):
     bpy.ops.object.mode_set(mode='OBJECT')
     bpy.ops.object.select_all(action='DESELECT')
@@ -144,5 +149,16 @@ for item in obj_coll:
             # print(f"{vert.index}: vec: {tuple(vert.co)}")
             except:
                 print(f"last point {item}")
+
+## select arm in variable 
+bpy.ops.object.mode_set(mode='POSE')
+
+rig = 'Female Transfer Rig'
+arm = bpy.data.objects[rig]
+
+clean_select(rig)
+
+for bone in arm.pose.bones:
+    r.bone_custom_shape_width(rig, bone, 2.0)
 
 bpy.ops.object.mode_set(mode='OBJECT')
