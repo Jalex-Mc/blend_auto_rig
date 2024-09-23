@@ -1509,8 +1509,13 @@ for index, item in enumerate(left_arm_IK_bones):
     else:
         if any(bone in item for bone in number):
             left_arm_IK_bones[index] = f"{item.split('_', 2)[0]}_{(item.split('_', 1)[1])[:-1]}IK_L"
+            print("Any works")
         else:
             left_arm_IK_bones[index] = f"{item.split('_', 2)[0]}_IK_L"
+            print("else works")
+
+
+# ['humerus_IK_L', 'forearm_IK_L', 'armTwist_1_IK_L', 'armTwist_2_IK_L', 'armTwist_3_IK_L', 'hand_IK_L']
 
 for index, item in enumerate(left_arm_FK_bones):
     if 'hand' in item:

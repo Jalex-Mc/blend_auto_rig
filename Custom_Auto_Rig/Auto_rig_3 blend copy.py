@@ -4,7 +4,6 @@ import math
 import os
 import sys
 
-
 class Rigging_Functions:
     
     def __init__(self):
@@ -1068,340 +1067,564 @@ sys.path.insert(0, module_dir)
 # Now you can import your module as usual
 # from rig_func import Rigging_Functions
 
-# initialize the class
+# initialize the methods
 r = Rigging_Functions()
 
-def deform_bones(rig_name, rig_class, deform_list):
-    r = rig_class
-    r.set_mode('OBJECT')
-    r.remove_object_selection()
-    r.object_selection(rig_name)
-    r.set_mode('EDIT')
-    arm = bpy.data.armatures[rig_name]
-    bone_list = r.rig_bone_list(rig_name)
-
-    for item in bone_list:
-        bone = arm.edit_bones[item]
-        if item in deform_list:
-            bone.use_deform = True
-        else:
-            bone.use_deform = False
-
-###### Cleaning ######
-
 rig = 'Female Transfer Rig'
+
+################################
+######### ARM ################
+
+pole_location, pole_global_location = r.object_location('elbowPoleEmpty_L')
+head = list(set(pole_location))
+tail = pole_location
+tail[1] += .1
+r.new_bone_creation(head, tail, 'elbowPole_L', rig, 'root', False, 0)
+head, tail = r.bone_global_locations(rig, 'elbowPole_L')
+head[1] += .5
+tail[1] += .5
+r.move_bone_world_location(rig, 'elbowPole_L', head, tail)
+
+pole_location, pole_global_location = r.object_location('elbowPoleEmpty_R')
+head = list(set(pole_location))
+tail = pole_location
+tail[1] += .1
+r.new_bone_creation(head, tail, 'elbowPole_R', rig, 'root', False, 0)
+head, tail = r.bone_global_locations(rig, 'elbowPole_R')
+head[1] += .5
+tail[1] += .5
+r.move_bone_world_location(rig, 'elbowPole_R', head, tail)
+
+
+arm = bpy.data.objects[rig]
+upmost_left_fingers = ['thumb_2_L', 'index_2_L', 'middle_2_L', 'ring_2_L', 'pinky_2_L']
+upmost_right_fingers = ['thumb_2_R', 'index_2_R', 'middle_2_R', 'ring_2_R', 'pinky_2_R']
 
 r.set_mode('OBJECT')
 r.remove_object_selection()
 r.remove_edit_and_arm_selection(rig)
+rotation_bones = []
 
-### deform & collections ###
-
-deform_list = [
-    "head",
-    "neck_2",
-    "neck_1",
-    "scapula_L",
-    "scapula_R",
-    "clavicle_L",
-    "clavicle_R",
-    "breast_L",
-    "breast_R",
-    "spine_3",
-    "spine_2",
-    "spine_1",
-    "pelvis_L",
-    "pelvis_R",
-    "humerus_L",
-    "humerus_R",
-    "forearm_L",
-    "forearm_R",
-    "armTwist_1_L",
-    "armTwist_1_R",
-    "armTwist_2_L",
-    "armTwist_2_R",
-    "armTwist_3_L",
-    "armTwist_3_R",
-    "hand_L",
-    "hand_R",
-    "hipTwist",
-    "butt_R",
-    "butt_L",
-    "femurDeform_L",
-    "femurDeform_R",
-    "kneeBendDeform_L",
-    "kneeBendDeform_R",
-    'femur_L',
-    'femur_R',
-    'femur_IK_L',
-    'femur_IK_R',
-    'tibia_IK_L',
-    'tibia_IK_R',
-    'tibia_L',
-    'tibia_R',
-    "footFK_L",
-    "footFK_R",
-    "bigToe_1_L",
-    "bigToe_1_R",
-    "bigToe_2_L",
-    "bigToe_2_R",
-    "indexToe_1_L",
-    "indexToe_1_R",
-    "indexToe_2_L",
-    "indexToe_2_R",
-    "indexToe_3_L",
-    "indexToe_3_R",
-    "midToe_1_L",
-    "midToe_1_R",
-    "midToe_2_L",
-    "midToe_2_R",
-    "midToe_3_L",
-    "midToe_3_R",
-    "ringToe_1_L",
-    "ringToe_1_R",
-    "ringToe_2_L",
-    "ringToe_2_R",
-    "ringToe_3_L",
-    "ringToe_3_R",
-    "pinkyToe_1_L",
-    "pinkyToe_1_R",
-    "pinkyToe_2_L",
-    "pinkyToe_2_R",
-    "pinkyToe_3_L",
-    "pinkyToe_3_R",
-    "index_1_L",
-    "index_2_L",
-    "index_3_L",
-    "index_4_L",
-    "index_1_R",
-    "index_2_R",
-    "index_3_R",
-    "index_4_R",
-    "middle_1_R",
-    "middle_2_R",
-    "middle_3_R",
-    "middle_4_R",
-    "middle_1_L",
-    "middle_2_L",
-    "middle_3_L",
-    "middle_4_L",
-    "ring_1_R",
-    "ring_2_R",
-    "ring_3_R",
-    "ring_4_R",
-    "ring_1_L",
-    "ring_2_L",
-    "ring_3_L",
-    "ring_4_L",
-    "pinky_1_L",
-    "pinky_2_L",
-    "pinky_3_L",
-    "pinky_4_L",
-    "pinky_1_R",
-    "pinky_2_R",
-    "pinky_3_R",
-    "pinky_4_R",
-    "thumb_1_L",
-    "thumb_2_L",
-    "thumb_3_L",
-    "thumb_1_R",
-    "thumb_2_R",
-    "thumb_3_R",
-]
-
-CTRL = ['root', 'head', 'neck_2', 'neck_1', 'neckHead', 'backCTRL','clavicle_L', 'clavicle_R', 'spine_3', 'spine_2', 'spine_1', 'pelvis', 'hipTwist', 'humerus_FK_L', 'humerus_FK_R', 'elbowPole_L', 'elbowPole_R', 'forearm_FK_L', 'forearm_FK_R', 'hand_FK_L', 'hand_FK_R', 'hand_IK_L', 'hand_IK_R', 'index_1_L', 'index_2_L', 'index_3_L', 'index_4_L', 'index_1_R', 'index_2_R', 'index_3_R', 'index_4_R', 'indexRotation_L', 'indexRotation_R', 'middle_1_R', 'middle_2_R', 'middle_3_R', 'middle_4_R', 'middle_1_L', 'middle_2_L', 'middle_3_L', 'middle_4_L', 'middleRotation_L', 'middleRotation_R', 'ring_1_R', 'ring_2_R', 'ring_3_R', 'ring_4_R', 'ring_1_L', 'ring_2_L', 'ring_3_L', 'ring_4_L', 'ringRotation_L', 'ringRotation_R', 'pinky_1_L', 'pinky_2_L', 'pinky_3_L', 'pinky_4_L', 'pinky_1_R', 'pinky_2_R', 'pinky_3_R', 'pinky_4_R', 'pinkyRotation_L', 'pinkyRotation_R', 'thumb_1_L', 'thumb_2_L', 'thumb_3_L', 'thumb_1_R', 'thumb_2_R', 'thumb_3_R', 'thumbRotation_L', 'thumbRotation_R', 'footRollCTRL_L', 'footRollCTRL_R', 'footIK_L', 'footIK_R', 'heelHeight_L', 'heelHeight_R', 'heelPosition_L', 'heelPosition_R', 'toesIK_L', 'toesIK_R', 'bigToeRotation_L', 'bigToeRotation_R', 'indexToeRotation_L', 'indexToeRotation_R', 'midToeRotation_L', 'midToeRotation_R', 'ringToeRotation_L', 'ringToeRotation_R', 'pinkyToeRotation_L', 'pinkyToeRotation_R', 'bigToe_1_L', 'bigToe_1_R', 'bigToe_2_L', 'bigToe_2_R', 'indexToe_1_L', 'indexToe_1_R', 'indexToe_2_L', 'indexToe_2_R', 'indexToe_3_L', 'indexToe_3_R', 'midToe_1_L', 'midToe_1_R', 'midToe_2_L', 'midToe_2_R', 'midToe_3_L', 'midToe_3_R', 'ringToe_1_L', 'ringToe_1_R', 'ringToe_2_L', 'ringToe_2_R', 'ringToe_3_L', 'ringToe_3_R', 'pinkyToe_1_L', 'pinkyToe_1_R', 'pinkyToe_2_L', 'pinkyToe_2_R', 'pinkyToe_3_L', 'pinkyToe_3_R']
-CTRL = []
-ACCESSORY = ['clavicle_MCH_L', 'clavicle_MCH_R', 'RBF_Upperarm_L', 'RBF_Upperarm_R', 'RBF_leg_L', 'RBF_leg_R', 'IKpoleHelpers_1_L', 'IKpoleHelpers_1_R', 'IKpoleHelpers_2_L', 'IKpoleHelpers_2_R', 'IKpoleHelpers_3_L', 'IKpoleHelpers_3_R', 'MCH_foot_L', 'MCH_foot_R', 'MCH_footRoll_1_L', 'MCH_footRoll_1_R', 'MCH_footRoll_3_L', 'MCH_footRoll_3_R', 'MCH_footRoll_2_L', 'MCH_footRoll_2_R', 'toes_L', 'toes_R']
-FK = ['humerus_FK_L', 'humerus_FK_R', 'forearm_FK_L', 'forearm_FK_R', 'armTwist_1_FK_L', 'armTwist_1_FK_R', 'armTwist_2_FK_L', 'armTwist_2_FK_R', 'armTwist_3_FK_L', 'armTwist_3_FK_R', 'hand_FK_L', 'hand_FK_R', 'footFK_L', 'footFK_R']
-IK = ['humerus_IK_L', 'humerus_IK_R', 'elbowPole_L', 'elbowPole_R', 'forearm_IK_L', 'forearm_IK_R', 'armTwist_1_IK_L', 'armTwist_1_IK_R', 'armTwist_2_IK_L', 'armTwist_2_IK_R', 'armTwist_3_IK_L', 'armTwist_3_IK_R', 'hand_IK_L', 'hand_IK_R', 'footIK_L', 'footIK_R', 'toesIK_L', 'toesIK_R']
-RBF = ['clavicle_MCH_L', 'clavicle_MCH_R', 'RBF_Upperarm_L', 'RBF_Upperarm_R', 'RBF_leg_L', 'RBF_leg_R']
-bones_to_assign = {'Deform': deform_list, 'CTRL': CTRL, 'ACCESSORY': ACCESSORY, 'FK': FK, 'IK': IK, 'RBF': RBF}
-
-deform_bones(rig, r, deform_list)
-r.create_bone_collections(rig, bones_to_assign)
-
-
-###############################################################
-## create a dictionary for control
-
-ctrls_list = [
-    {'Root': 'root'},
-    {'Head': ['head', 'neck_2', 'neck_1']},
-    {'Head CTRL': 'neckHead'},
-    {'L clavicle': 'clavicle_L'},
-    {'R clacicle': 'clavicle_R'},
-    {'Breast/Pecs': ['breast_L', 'breast_R']},
-    {'L arm IK': ['elbowPole_L', 'hand_IK_L']},
-    {'R arm IK': ['elbowPole_R', 'hand_IK_R']},
-    {'L arm FK': ['humerus_FK_L', 'forearm_FK_L', 'hand_FK_L']},
-    {'R arm FK': ['humerus_FK_R', 'forearm_FK_R', 'hand_FK_R']},
-    {'L hand': ['pinky_1_L','ring_1_L','middle_1_L','index_1_L','thumb_1_L', 'thumbRotation_L', 'thumb_2_L', 'thumb_3_L', 'indexRotation_L', 'index_2_L', 'index_3_L', 'index_4_L', 'middleRotation_L', 'middle_2_L', 'middle_3_L', 'middle_4_L', 'ringRotation_L', 'ring_2_L', 'ring_3_L', 'ring_4_L', 'pinkyRotation_L', 'pinky_2_L', 'pinky_3_L', 'pinky_4_L']},
-    {'R hand': ['pinky_1_R','ring_1_R','middle_1_R','index_1_R','thumb_1_R','thumbRotation_R', 'thumb_2_R', 'thumb_3_R', 'indexRotation_R', 'index_2_R', 'index_3_R', 'index_4_R', 'middleRotation_R', 'middle_2_R', 'middle_3_R', 'middle_4_R', 'ringRotation_R', 'ring_2_R', 'ring_3_R', 'ring_4_R', 'pinkyRotation_R', 'pinky_2_R', 'pinky_3_R', 'pinky_4_R']},
-    {'Spine': ['spine_3', 'spine_2', 'spine_1']},
-    {'Back': 'backCTRL'},
-    {'Hip': 'hipTwist'},
-    {'Pelvis': 'pelvis'},
-    {'L Leg IK': ['kneePole_L', 'footIK_L', 'toesIK_L', 'footRollCTRL_L']},
-    {'R Leg IK': ['kneePole_R', 'footIK_R', 'toesIK_R', 'footRollCTRL_R']},
-    {'L heel position': ['heelPosition_L', 'heelHeight_L']},
-    {'R heel position': ['heelPosition_R', 'heelHeight_R']},
-    {'L toes': ['toes_L', 'bigToeRotation_L', 'bigToe_1_L', 'bigToe_2_L', 'indexToeRotation_L', 'indexToe_1_L', 'indexToe_2_L', 'indexToe_3_L', 'midToeRotation_L', 'midToe_1_L', 'midToe_2_L', 'midToe_3_L', 'ringToeRotation_L', 'ringToe_1_L', 'ringToe_2_L', 'ringToe_3_L', 'pinkyToeRotation_L', 'pinkyToe_1_L', 'pinkyToe_2_L', 'pinkyToe_3_L']},
-    {'R toes': ['toes_R', 'bigToeRotation_R', 'bigToe_1_R', 'bigToe_2_R', 'indexToeRotation_R', 'indexToe_1_R', 'indexToe_2_R', 'indexToe_3_R', 'midToeRotation_R', 'midToe_1_R', 'midToe_2_R', 'midToe_3_R', 'ringToeRotation_R', 'ringToe_1_R', 'ringToe_2_R', 'ringToe_3_R', 'pinkyToeRotation_R', 'pinkyToe_1_R', 'pinkyToe_2_R', 'pinkyToe_3_R']},
-    {'L Leg FK': ['footFK_L', 'tibia_FK_L', 'femur_FK_L']},
-    {'R Leg FK': ['footFK_R', 'tibia_FK_R', 'femur_FK_R']},
-    {'L foot': 'footFK_L'},
-    {'R foot': 'footFK_R'}]
-
-# print(len(ctrls_list))
-
-# for item in ctrls_list:
-#     for key, value in item.items():
-#         if value != list:
-#             bcoll_child = armature.collections.new(key, parent=bcoll_root)
-#         print(value)
-
-# for index, item in enumerate(deform_list):
-    # print(ctrls_list[index])
-
-# Create bone collections
-## putting bones in ctrl 
-
-############################
-
-armature = bpy.data.objects["Female Transfer Rig"].data
-# print(armature.collections["CTRL"])
-
-bcoll_root = armature.collections["CTRL"]
-
-for item in ctrls_list:
-    for key, value in item.items():
-        if type(value) != list:
-            bcoll_child = armature.collections.new(key, parent=bcoll_root)
-            bcoll_child.assign(armature.bones[value])
-        else:
-            bcoll_child = armature.collections.new(key, parent=bcoll_root)
-            for bone in value:
-                bcoll_child.assign(armature.bones[bone])
-
-        print(value)
-
-# bcoll_child = armature.collections.new("Child Collection", parent=bcoll_root)
-
-# # Moving the bone collection after it has been created.
-# bcoll = armature.collections.new("collection")
-# bcoll.parent = bcoll_root  # Assign a new parent collection.
-# bcoll.child_number = 0     # Move to be the first of its siblings.
-
-# # Access to the top level (aka 'root') collections:
-# for bcoll in armature.collections:
-#     print(f'Root collection: {bcoll.name}')
-
-# # Access to all collections:
-# for bcoll in armature.collections_all:
-#     print(f'Collection: {bcoll.name}')
-
-# # Assigned bones can be retrieved hierarchically:
-# bcoll_child.assign(armature.bones['backCTRL'])
-# for bone in bcoll_root.bones_recursive:
-#     print(bone.name)
-
-##########################################################
-# rig clean up
-
-
-
-# r.lock_rotation(rig, 'humerus_FK_L', y=True, z=True)
-# r.lock_rotation(rig, 'humerus_FK_R', y=True, z=True)
-
-left_hand_rotation_bones = ['thumbRotation_L', 'indexRotation_L', 'middleRotation_L', 'ringRotation_L', 'pinkyRotation_L']
-
-for bone in left_hand_rotation_bones:
-    r.set_mode('OBJECT')
-    r.remove_edit_and_arm_selection(rig)
-    r.set_mode('OBJECT')
-    r.remove_object_selection()
-    r.object_selection(rig)
-    r.set_mode('EDIT')
+for item in upmost_left_fingers:
     arm = bpy.data.armatures[rig]
-    bone = arm.edit_bones[bone]
-    bone.roll *= -1 
+    bone = arm.edit_bones[item]
+    head, tail = r.bone_global_locations(rig, item)
+    rotation_bone = f"{item.split('_')[0]+'Rotation_L'}"
+    rotation_bones.append(rotation_bone)
+    r.new_bone_creation(head, tail, rotation_bone, rig, None, False, bone.roll)
+    r.parent_bone(rig, rotation_bone, f"{item.split('_')[0]+'_1_L'}", True)
 
-r.limit_rotation(rig, 'hipTwist', max_x=r.degree_to_radians(25), min_x=r.degree_to_radians(-35), max_y=r.degree_to_radians(15), min_y=r.degree_to_radians(-15), max_z=r.degree_to_radians(30), min_z=r.degree_to_radians(-20), limit_x=True, limit_y=True,limit_z=True, owner_space='LOCAL')
-
-## bone color ##
-
-red = ['head', 'neck_2', 'neck_1', 'spine_3', 'spine_2', 'spine_1', 'hand_IK_L']
-blue = ['hand_IK_R']
-theme11 = ['humerus_FK_R', 'forearm_FK_R','hand_FK_R', 'pelvis']
-theme12 = ['footIK_L', 'footIK_R', ]
-yellow = ['hipTwist', 'root']
-neon_green = ['neckHead', 'backCTRL']
-orange = ['elbowPole_L', 'kneePole_L']
-bluegreen = ['elbowPole_R', 'kneePole_R']
-purple = ['heelHeight_L', 'heelHeight_R', 'bigToe_1_L', 'bigToe_1_R', 'bigToe_2_L', 'bigToe_2_R', 'indexToe_1_L', 'indexToe_1_R', 'indexToe_2_L', 'indexToe_2_R', 'indexToe_3_L', 'indexToe_3_R', 'midToe_1_L', 'midToe_1_R', 'midToe_2_L', 'midToe_2_R', 'midToe_3_L', 'midToe_3_R', 'ringToe_1_L', 'ringToe_1_R', 'ringToe_2_L', 'ringToe_2_R', 'ringToe_3_L', 'ringToe_3_R', 'pinkyToe_1_L', 'pinkyToe_1_R', 'pinkyToe_2_L', 'pinkyToe_2_R', 'pinkyToe_3_L', 'pinkyToe_3_R']
-pink = ['footRollCTRL_L', 'footRollCTRL_R', 'toesIK_L', 'toesIK_R', 'bigToeRotation_L', 'bigToeRotation_R', 'indexToeRotation_L', 'indexToeRotation_R', 'midToeRotation_L', 'midToeRotation_R', 'ringToeRotation_L', 'ringToeRotation_R', 'pinkyToeRotation_L', 'pinkyToeRotation_R']
-green = ['clavicle_L', 'clavicle_R', 'humerus_FK_L', 'forearm_FK_L', 'hand_FK_L', 'heelPosition_L', 'heelPosition_R']
+for index, item in enumerate(rotation_bones):
+    arm = bpy.data.armatures[rig]
+    roll = arm.edit_bones[upmost_left_fingers[index]].roll
+    bone = arm.edit_bones[item]
+    bone.roll = -roll
 
 r.set_mode('OBJECT')
+r.remove_object_selection()
+r.remove_edit_and_arm_selection(rig)
+rotation_bones = []
+
+for item in upmost_right_fingers:
+    arm = bpy.data.armatures[rig]
+    bone = arm.edit_bones[item]
+    head, tail = r.bone_global_locations(rig, item)
+    rotation_bone = f"{item.split('_')[0]+'Rotation_R'}"
+    rotation_bones.append(rotation_bone)
+    r.new_bone_creation(head, tail, rotation_bone, rig, None, False, bone.roll)
+    r.parent_bone(rig, rotation_bone, f"{item.split('_')[0]+'_1_R'}", True)
+
+for index, item in enumerate(rotation_bones):
+    arm = bpy.data.armatures[rig]
+    roll = arm.edit_bones[upmost_left_fingers[index]].roll
+    bone = arm.edit_bones[item]
+    bone.roll = -roll
+
+arm = bpy.data.objects[rig]
+left_fingers = []
+right_fingers = []
+left_rotation = []
+right_rotation = []
+for bone in arm.data.bones:
+    if bone.parent is None:
+        pass
+    elif bone.parent.name == 'hand_L':
+        left_fingers.append(bone.name)
+        for child_bone in bone.children_recursive:
+            left_fingers.append(child_bone.name)
+
+left_fingers.remove('thumb_2_L')
+sub = item.split('_')[0] + 'Rotation_L'
+r.copy_rotation(rig, 'thumb_2_L', influence=1.0, mix_mode='AFTER', subtarget='thumbRotation_L', use_x=True, target_space='LOCAL', owner_space='LOCAL')
+
+for item in left_fingers:
+    if '_1_' in item:
+        left_fingers.remove(item)
+
+for item in left_fingers:
+    if '_2_' in item:
+        r.lock_rotation(rig, item, z=True)
+    else:
+        r.lock_rotation(rig, item, y=True, z=True)
+
+for item in left_fingers:
+    if 'Rotation' in item:
+        left_fingers.remove(item)
+        left_rotation.append(item)
+
+for item in left_fingers:
+    if '_4_' in item or 'thumb_3_L' in item:
+        sub = item.split('_')[0] + 'Rotation_L'
+        r.copy_rotation(rig, item, influence=1.0, mix_mode='AFTER', subtarget=sub, use_x=True, target_space='LOCAL', owner_space='LOCAL')
+        bone = r.select_bone_as_active_pose(rig, item)
+        bone.constraints[-1].mix_mode = "AFTER"
+    else:
+        sub = item.split('_')[0] + 'Rotation_L'
+        r.copy_rotation(rig, item, influence=1.0, mix_mode='BEFORE', subtarget=sub, use_x=True, target_space='LOCAL', owner_space='LOCAL')
+        bone = r.select_bone_as_active_pose(rig, item)
+        bone.constraints[-1].mix_mode = "BEFORE"
+
+for item in left_rotation:
+    if 'thumb' in item:
+        pass
+    else:
+        r.limit_rotation(rig, item, max_x=r.degree_to_radians(100), limit_x=True, owner_space='LOCAL')
+
 r.remove_edit_and_arm_selection(rig)
 r.set_mode('OBJECT')
 r.remove_object_selection()
 r.object_selection(rig)
-obj = bpy.context.active_object
+r.set_mode('EDIT')
+forearm_roll = r.bone_roll(rig, 'forearm_L')
 
-if obj and obj.type == 'ARMATURE':
-    # Iterate through the bones
-    for bone in obj.pose.bones:
-        if bone.name in red:
-            bone.color.palette = 'THEME01'
-        if bone.name in blue:
-             bone.color.palette = 'THEME04'
-        if bone.name in theme11:
-            bone.color.palette = 'THEME11'
-        if bone.name in theme12:
-            bone.color.palette = 'THEME12'
-        if bone.name in yellow:
-            bone.color.palette = 'THEME09'
-        if bone.name in neon_green:
-            bone.color.palette = 'THEME03'
-        if bone.name in orange:
-            bone.color.palette = 'THEME02'
-        if bone.name in bluegreen:
-            bone.color.palette = 'THEME08'
-        if bone.name in purple:
-            bone.color.palette = 'THEME06'
-        if bone.name in pink:
-            bone.color.palette = 'THEME05'
-        if bone.name in green:
-            bone.color.palette = 'THEME15'
+for bone in arm.data.bones:
+    if bone.parent is None:
+        pass
+    elif bone.parent.name == 'hand_R':
+        right_fingers.append(bone.name)
+        for child_bone in bone.children_recursive:
+            right_fingers.append(child_bone.name)
 
+right_fingers.remove('thumb_2_R')
+sub = item.split('_')[0] + 'Rotation_R'
+r.copy_rotation(rig, 'thumb_2_R', influence=1.0, mix_mode='AFTER', subtarget='thumbRotation_R', use_x=True, target_space='LOCAL', owner_space='LOCAL')
 
-## file clean up ##
+for item in right_fingers:
+    if '_1_' in item:
+        right_fingers.remove(item)
+
+for item in right_fingers:
+    if '_2_' in item:
+        r.lock_rotation(rig, item, z=True)
+    else:
+        r.lock_rotation(rig, item, y=True, z=True)
+
+for item in right_fingers:
+    if 'Rotation' in item:
+        right_fingers.remove(item)
+        right_rotation.append(item)
+
+for item in right_fingers:
+    if '_4_' in item or 'thumb_3_R' in item:
+        sub = item.split('_')[0] + 'Rotation_R'
+        r.copy_rotation(rig, item, influence=1.0, mix_mode='AFTER', subtarget=sub, use_x=True, target_space='LOCAL', owner_space='LOCAL')
+        bone = r.select_bone_as_active_pose(rig, item)
+        bone.constraints[-1].mix_mode = "AFTER"
+    else:
+        sub = item.split('_')[0] + 'Rotation_R'
+        r.copy_rotation(rig, item, influence=1.0, mix_mode='BEFORE', subtarget=sub, use_x=True, target_space='LOCAL', owner_space='LOCAL')
+        bone = r.select_bone_as_active_pose(rig, item)
+        bone.constraints[-1].mix_mode = "BEFORE"
+
+for item in right_rotation:
+    if 'thumb' in item:
+        pass
+    else:
+        r.limit_rotation(rig, item, max_x=r.degree_to_radians(100), limit_x=True, owner_space='LOCAL')
+
+r.remove_edit_and_arm_selection(rig)
+r.set_mode('OBJECT')
+r.remove_object_selection()
+r.object_selection(rig)
+r.set_mode('EDIT')
+forearm_roll = r.bone_roll(rig, 'forearm_L')
+##
+##
+##
+##
+
+## SUBDIVIDE ##
 
 r.set_mode('OBJECT')
 r.remove_object_selection()
 r.remove_edit_and_arm_selection(rig)
+forearm_roll = r.bone_roll(rig, 'forearm_L')
+r.duplicate_bones(rig, 'forearm_L', 'forearm_L.001', 'humerus_L', True, forearm_roll, True)
+r.remove_edit_and_arm_selection(rig)
+arm = bpy.data.objects[rig]
+bone = arm.data.edit_bones['forearm_L']
+bone.select = True
+bone.select_head = True
+bone.select_tail = True
+arm.data.edit_bones.active = bone
+bpy.ops.armature.subdivide(number_cuts=2)
+r.remove_edit_and_arm_selection(rig)
+r.renamer(rig, 'forearm_L', 'armTwist_1_L')
+r.renamer(rig, 'forearm_L.002', 'armTwist_2_L')
+r.renamer(rig, 'forearm_L.003', 'armTwist_3_L')
+r.renamer(rig, 'forearm_L.001', 'forearm_L')
+r.parent_bone(rig, 'hand_L', 'forearm_L', True)
+
 r.set_mode('OBJECT')
 r.remove_object_selection()
+r.remove_edit_and_arm_selection(rig)
+forearm_roll = r.bone_roll(rig, 'forearm_R')
+r.duplicate_bones(rig, 'forearm_R', 'forearm_R.001', 'humerus_R', True, forearm_roll, True)
+r.remove_edit_and_arm_selection(rig)
+arm = bpy.data.objects[rig]
+bone = arm.data.edit_bones['forearm_R']
+bone.select = True
+bone.select_head = True
+bone.select_tail = True
+arm.data.edit_bones.active = bone
+bpy.ops.armature.subdivide(number_cuts=2)
+r.remove_edit_and_arm_selection(rig)
+r.renamer(rig, 'forearm_R', 'armTwist_1_R')
+r.renamer(rig, 'forearm_R.002', 'armTwist_2_R')
+r.renamer(rig, 'forearm_R.003', 'armTwist_3_R')
+r.renamer(rig, 'forearm_R.001', 'forearm_R')
+r.parent_bone(rig, 'hand_R', 'forearm_R', True)
 
 
-col = bpy.data.collections.get("Collection")
-if col:
-   for obj in col.objects:
-        if 'Empty' in obj.name:
-           print(obj.name)
-           obj.select_set(True)
-        else:
-           print(obj.name)
-bpy.ops.object.delete()
+r.copy_rotation(rig, 'armTwist_1_L',influence=0.3 ,subtarget='armTwist_2_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
+r.copy_rotation(rig, 'armTwist_2_L',influence=0.727 ,subtarget='armTwist_3_L', use_x=True, use_y=True, use_z=True, target_space='LOCAL', owner_space='LOCAL')
+r.copy_rotation(rig, 'armTwist_3_L',subtarget='hand_L', use_y=True, target_space='LOCAL', owner_space='LOCAL')
 
+at_1_L_head, at_1_L_tail = r.bone_global_locations(rig, 'armTwist_1_L')
+at_2_L_head, at_2_L_tail = r.bone_global_locations(rig, 'armTwist_2_L')
+at_3_L_head, at_3_L_tail = r.bone_global_locations(rig, 'armTwist_3_L')
+at_1_R_head, at_1_R_tail = r.bone_global_locations(rig, 'armTwist_1_R')
+at_2_R_head, at_2_R_tail = r.bone_global_locations(rig, 'armTwist_2_R')
+at_3_R_head, at_3_R_tail = r.bone_global_locations(rig, 'armTwist_3_R')
+
+location_list = [at_1_L_head, at_1_L_tail, at_2_L_head, at_2_L_tail, at_3_L_head, at_3_L_tail, at_1_R_head, at_1_R_tail, at_2_R_head, at_2_R_tail, at_3_L_head, at_3_L_tail]
+
+# parenting armTwist_3 to the forearm freaking deletes it for some reason.
+
+at_head, at_tail = r.bone_global_locations(rig, 'armTwist_1_L')
+
+r.parent_bone(rig, 'armTwist_1_L', 'forearm_L', False)
+r.parent_bone(rig, 'armTwist_2_L', 'forearm_L', False)
+r.parent_bone(rig, 'armTwist_1_R', 'forearm_R', False)
+r.parent_bone(rig, 'armTwist_2_R', 'forearm_R', False)
+
+r.remove_edit_and_arm_selection(rig)
+r.set_mode('OBJECT')
 r.remove_object_selection()
-
+r.set_mode('EDIT')
 arm = bpy.data.armatures[rig]
-arm.collections.get("Deform").is_visible = False
-arm.collections.get("ACCESSORY").is_visible = False
-arm.collections.get("FK").is_visible = False
-arm.collections.get("IK").is_visible = False
-arm.collections.get("RBF").is_visible = False
+bone = arm.edit_bones['armTwist_3_L']
+bone.use_connect = False
+bone.parent = arm.edit_bones['forearm_L']
+r.remove_edit_and_arm_selection(rig)
+r.set_mode('OBJECT')
+r.remove_object_selection()
+r.set_mode('EDIT')
+arm = bpy.data.armatures[rig]
+bone = arm.edit_bones['armTwist_3_R']
+bone.use_connect = False
+bone.parent = arm.edit_bones['forearm_R']
 
-sys.path.remove(module_dir)
+
+# a_list = ['armTwist_1_L', 'armTwist_2_L', 'armTwist_3_L', 'armTwist_1_R', 'armTwist_2_R', 'armTwist_3_R']
+r.remove_edit_and_arm_selection(rig)
+r.set_mode('OBJECT')
+r.remove_object_selection()
+r.set_mode('EDIT')
+head_count = 0
+tail_count = 1
+arm = bpy.data.armatures[rig]
+bone = arm.edit_bones['armTwist_1_L']
+# print(bone)
+bone.head = at_head
+bone.tail = at_tail
+
+r.remove_edit_and_arm_selection(rig)
+r.set_mode('OBJECT')
+r.remove_object_selection()
+r.set_mode('EDIT')
+head_count = 0
+tail_count = 1
+arm = bpy.data.armatures[rig]
+bone = arm.edit_bones['armTwist_2_L']
+# print(bone)
+bone.head = at_2_L_head
+bone.tail = at_2_L_tail
+
+r.remove_edit_and_arm_selection(rig)
+r.set_mode('OBJECT')
+r.remove_object_selection()
+r.set_mode('EDIT')
+head_count = 0
+tail_count = 1
+arm = bpy.data.armatures[rig]
+bone = arm.edit_bones['armTwist_3_L']
+# print(bone)
+bone.head = at_3_L_head
+bone.tail = at_3_L_tail
+
+r.remove_edit_and_arm_selection(rig)
+r.set_mode('OBJECT')
+r.remove_object_selection()
+r.set_mode('EDIT')
+head_count = 0
+tail_count = 1
+arm = bpy.data.armatures[rig]
+bone = arm.edit_bones['armTwist_1_R']
+# print(bone)
+bone.head = at_1_R_head
+bone.tail = at_1_R_tail
+
+r.remove_edit_and_arm_selection(rig)
+r.set_mode('OBJECT')
+r.remove_object_selection()
+r.set_mode('EDIT')
+head_count = 0
+tail_count = 1
+arm = bpy.data.armatures[rig]
+bone = arm.edit_bones['armTwist_2_R']
+# print(bone)
+bone.head = at_2_R_head
+bone.tail = at_2_R_tail
+
+r.remove_edit_and_arm_selection(rig)
+r.set_mode('OBJECT')
+r.remove_object_selection()
+r.set_mode('EDIT')
+head_count = 0
+tail_count = 1
+arm = bpy.data.armatures[rig]
+bone = arm.edit_bones['armTwist_3_R']
+# print(bone)
+bone.head = at_3_R_head
+bone.tail = at_3_R_tail
+
+#for some reason, it won't select the right bone, so fuck me I guess.
+
+# for item in a_list:
+#     # print(item)
+#     r.remove_edit_and_arm_selection(rig)
+#     r.set_mode('OBJECT')
+#     r.remove_object_selection()
+#     r.object_selection(rig)
+#     r.set_mode('EDIT')
+#     arm = bpy.data.armatures[rig]
+#     r.select_bone_as_active_edit(rig, item)
+#     bone = arm.edit_bones[item]
+#     print(bone.name)
+#     if bone.name != item:
+#         while bone.name != item:
+#             for bone_name in bpy.context.active_object.data.edit_bones[:]:
+#                 print(bone_name.name)
+#                 if bone_name.name == item:
+#                     bone = arm.edit_bones[bone_name.name]
+
+#     print(bone.name)
+#     the_head = location_list[head_count]
+#     the_tail = location_list[head_count + 1]
+#     at_head, at_tail = r.bone_global_locations(rig, bone.name)
+#     print(at_head)
+#     print(at_tail)
+#     bone.head = at_head
+#     bone.tail = at_tail
+#     print(head_count)
+#     head_count += 2
+
+##### IK ####
+
+r.remove_edit_and_arm_selection(rig)
+r.set_mode('OBJECT')
+r.remove_object_selection()
+left_arm_bones = []
+right_arm_bones = []
+arm = bpy.data.objects[rig]
+left_arm_IK_bones = []
+left_arm_FK_bones = []
+right_arm_IK_bones = []
+right_arm_FK_bones = []
+
+for bone in arm.data.bones:
+    if bone.parent is None:
+        pass
+    elif bone.parent.name == 'clavicle_L':
+        left_arm_bones.append(bone.name)
+
+        for child_bone in bone.children_recursive:
+            if "thumb" in child_bone.name:
+                pass
+            elif "index" in child_bone.name:
+                pass
+            elif "middle" in child_bone.name:
+                pass
+            elif "ring" in child_bone.name:
+                pass
+            elif "pinky" in child_bone.name:
+                pass
+            else:
+                left_arm_bones.append(child_bone.name)
+
+for bone in arm.data.bones:
+    if bone.parent is None:
+        pass
+    elif bone.parent.name == 'clavicle_R':
+        right_arm_bones.append(bone.name)
+
+        for child_bone in bone.children_recursive:
+            if "thumb" in child_bone.name:
+                pass
+            elif "index" in child_bone.name:
+                pass
+            elif "middle" in child_bone.name:
+                pass
+            elif "ring" in child_bone.name:
+                pass
+            elif "pinky" in child_bone.name:
+                pass
+            else:
+                right_arm_bones.append(child_bone.name)
+
+for item in left_arm_bones:
+    left_arm_IK_bones.append(item)
+    left_arm_FK_bones.append(item)
+
+for item in right_arm_bones:
+    right_arm_IK_bones.append(item)
+    right_arm_FK_bones.append(item)
+
+number = ['1', '2', '3']
+
+for index, item in enumerate(left_arm_IK_bones):
+    if 'hand' in item:
+        left_arm_IK_bones[index] = f"{item.split('_')[0]}_IK_L"
+    else:
+        # if any(bone in item for bone in number):
+        for bone in number:
+            if bone in item:
+                left_arm_IK_bones[index] = f"{item.split('_', 2)[0]}_{(item.split('_', 1)[1])[:-1]}IK_L"
+                print("Loop works")
+            else:
+                left_arm_IK_bones[index] = f"{item.split('_', 2)[0]}_IK_L"
+                print("else")
+
+print(left_arm_IK_bones)
+
+# for index, item in enumerate(left_arm_FK_bones):
+#     if 'hand' in item:
+#         left_arm_FK_bones[index] = f"{item.split('_')[0]}_FK_L"
+#     else:
+#         if any(bone in item for bone in number):
+#             left_arm_FK_bones[index] = f"{item.split('_', 2)[0]}_{(item.split('_', 1)[1])[:-1]}FK_L"
+#         else:
+#             left_arm_FK_bones[index] = f"{item.split('_', 2)[0]}_FK_L"
+
+# for index, item in enumerate(right_arm_IK_bones):
+#     if 'hand' in item:
+#         right_arm_IK_bones[index] = f"{item.split('_')[0]}_IK_R"
+#     else:
+#         if any(bone in item for bone in number):
+#             right_arm_IK_bones[index] = f"{item.split('_', 2)[0]}_{(item.split('_', 1)[1])[:-1]}IK_R"
+#         else:
+#             right_arm_IK_bones[index] = f"{item.split('_', 2)[0]}_IK_R"
+
+# for index, item in enumerate(right_arm_FK_bones):
+#     if 'hand' in item:
+#         right_arm_FK_bones[index] = f"{item.split('_')[0]}_FK_R"
+#     else:
+#         if any(bone in item for bone in number):
+#             right_arm_FK_bones[index] = f"{item.split('_', 2)[0]}_{(item.split('_', 1)[1])[:-1]}FK_R"
+#         else:
+#             right_arm_FK_bones[index] = f"{item.split('_', 2)[0]}_FK_R"
+
+# ##### uncomment above
+
+# # for index, item in enumerate(left_arm_FK_bones):
+# #     left_arm_FK_bones[index] = f"{item.split('_')[0]}_FK_L"
+
+# # for index, item in enumerate(right_arm_FK_bones):
+# #     if 'hand' in item:
+# #         right_arm_IK_bones[index] = f"{item.split('_')[0]}IK_CTRL_R"
+# #     else:
+# #         right_arm_IK_bones[index] = f"{item.split('_')[0]}_IK_R"
+
+# # for index, item in enumerate(right_arm_FK_bones):
+# #     right_arm_FK_bones[index] = f"{item.split('_')[0]}_FK_R"
+
+# ###### uncomment below
+# r.remove_edit_and_arm_selection(rig)
+# r.set_mode('OBJECT')
+# r.remove_object_selection()
+# r.object_selection(rig)
+# r.set_mode('EDIT')
+
+
+# for index, item in enumerate(left_arm_bones):
+#     forearm_roll = r.bone_roll(rig, left_arm_bones[index])
+#     arm = bpy.data.objects[rig]
+#     parent = arm.data.bones[item].parent.name
+#     r.duplicate_bones(rig, item, left_arm_IK_bones[index], parent, False, forearm_roll, False)
+# hand_ctrl_length = r.bone_length('hand_IK_L', rig) * 2
+# r.change_bone_length('hand_IK_L', rig, hand_ctrl_length)
+
+
+
+# for index, item in enumerate(left_arm_bones):
+#     forearm_roll = r.bone_roll(rig, left_arm_bones[index])
+#     arm = bpy.data.objects[rig]
+#     parent = arm.data.bones[item].parent.name
+#     r.duplicate_bones(rig, item, left_arm_FK_bones[index], parent, False, forearm_roll, False)
+
+# r.remove_edit_and_arm_selection(rig)
+# r.set_mode('OBJECT')
+# r.remove_object_selection()
+# r.object_selection(rig)
+# r.set_mode('EDIT')
+
+# for index, item in enumerate(right_arm_bones):
+#     forearm_roll = r.bone_roll(rig, right_arm_bones[index])
+#     arm = bpy.data.objects[rig]
+#     parent = arm.data.bones[item].parent.name
+#     r.duplicate_bones(rig, item, right_arm_IK_bones[index], parent, False, forearm_roll, False)
+# hand_ctrl_length = r.bone_length('hand_IK_R', rig) * 2
+# r.change_bone_length('hand_IK_R', rig, hand_ctrl_length)
+
+# for index, item in enumerate(right_arm_bones):
+#     forearm_roll = r.bone_roll(rig, right_arm_bones[index])
+#     arm = bpy.data.objects[rig]
+#     parent = arm.data.bones[item].parent.name
+#     r.duplicate_bones(rig, item, right_arm_FK_bones[index], parent, False, forearm_roll, False)
+
+# r.remove_edit_and_arm_selection(rig)
+# r.set_mode('OBJECT')
+# r.remove_object_selection()
+
+# # r.copy_rotation(rig, 'hand_L', subtarget='hand_IK_L')
+# # r.copy_rotation(rig, 'hand_R', subtarget='hand_IK_R')
+
+# r.parent_bone(rig, 'forearm_IK_L', 'humerus_IK_L', True)
+# r.parent_bone(rig, 'forearm_IK_R', 'humerus_IK_R', True)
+# r.parent_bone(rig, 'forearm_FK_L', 'humerus_FK_L', True)
+# r.parent_bone(rig, 'forearm_FK_R', 'humerus_FK_R', True)
+
+
+# r.create_IK(rig, 'forearm_IK_L', 2, r.degree_to_radians(-80), 'elbowPole_L', rig, 'hand_IK_L', rig)
+# r.create_IK(rig, 'forearm_IK_R', 2, r.degree_to_radians(-80), 'elbowPole_R', rig, 'hand_IK_R', rig)
+
+
+# # print(left_arm_bones)
+# # print(left_arm_FK_bones)
+# # print(left_arm_IK_bones)
+# # print(right_arm_bones)
+# # print(right_arm_FK_bones)
+# # print(right_arm_IK_bones)
+
+# sys.path.remove(module_dir)

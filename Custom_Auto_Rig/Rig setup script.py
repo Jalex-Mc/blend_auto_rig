@@ -124,14 +124,34 @@ class VIEW3D_PT_my_custom_panel(bpy.types.Panel):  # class naming convention ‘
         self.layout.row().label(text="Fix knee poles before continuing")
         row = self.layout.row()
         row.operator("arm.autorig_2", text="Run Part 2")
-        self.layout.row().label(text="Fix elbow poles before continuing")
         row = self.layout.row()
         row.operator("arm.autorig_3", text="Run Part 3")
+        self.layout.row().label(text="Fix elbow poles before continuing")
         row = self.layout.row()
-        self.layout.row().label(text="Create Controls Before Next Part")
         row.operator("arm.autorig_4", text="Run Part 4")
+        self.layout.row().label(text="Create Controls Before Next Part")
+        row = self.layout.row()
+        row.operator("arm.autorig_5", text="Run Part 5")
         row = self.layout.row()
         self.layout.row().label(text="Finished!")
+
+        ### once script 3 is done, layout - script 1 button, script 2-3 button, script 4-6 button, ctrls button.
+
+        # """define the layout of the panel"""
+        # self.layout.row().label(text="Click buttons in order")
+        # row = self.layout.row()
+        # row.operator("arm.autorig_1", text="Run Part 1")
+        # self.layout.row().label(text="Fix knee poles before continuing")
+        # row = self.layout.row()
+        # row.operator("arm.autorig_2", text="Run Part 2")
+        # self.layout.row().label(text="Fix elbow poles before continuing")
+        # row = self.layout.row()
+        # row.operator("arm.autorig_3", text="Run Part 3")
+        # row = self.layout.row()
+        # self.layout.row().label(text="Create Controls Before Next Part")
+        # row.operator("arm.autorig_4", text="Run Part 4")
+        # row = self.layout.row()
+        # self.layout.row().label(text="Finished!")
 
 
 
