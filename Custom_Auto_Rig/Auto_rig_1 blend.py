@@ -1089,9 +1089,12 @@ a_rig['rig_id'] = "universal rig"
 # Makes sure the scene's orientation transformation is set to Global
 bpy.context.scene.transform_orientation_slots[0].type = 'GLOBAL'
 
+r.object_selection('Female Transfer Rig')
+
 r.set_mode('OBJECT')
 r.remove_object_selection()
 r.remove_edit_and_arm_selection(rig)
+
 
 r.create_root_bone(rig) #4
 r.parent_bone(rig, 'pelvis', 'root', False)
