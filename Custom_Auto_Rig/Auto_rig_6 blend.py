@@ -1404,3 +1404,44 @@ arm.collections.get("IK").is_visible = False
 arm.collections.get("RBF").is_visible = False
 
 sys.path.remove(module_dir)
+
+
+### testing getting around script 3 issue
+
+# Create a new text block or get an existing one
+if "ctrl-list.txt" not in bpy.data.texts:
+    text_block = bpy.data.texts.new("ctrl-list.txt")
+else:
+    text_block = bpy.data.texts["script-6.py"]
+
+
+with open('O:/Onedrive/Python_Blender/blend_auto_rig/Custom_Auto_Rig/ctrl_list.txt') as file:
+    lines = file.read()
+    # lines = [line.rstrip('\n') for line in file]
+    # for line in file:
+    #     print(line.rstrip())
+
+
+
+# The text you want to paste
+# text_to_paste = """Hello, this is some text 
+# pasted into Blender's text editor."""
+
+text_to_paste = lines
+
+# Set the text for the text block
+text_block.clear()  # Clear any existing text
+text_block.write(text_to_paste)
+
+# Ensure the text block is displayed in the text editor
+for area in bpy.context.screen.areas:
+    if area.type == 'TEXT_EDITOR':
+        area.spaces.active.text = text_block
+        break
+else:
+    # If no text editor is open, change an area to a text editor and display the text block
+    for area in bpy.context.screen.areas:
+        if area.type == 'VIEW_3D':  # Change the 3D view to a text editor for demonstration purposes
+            area.type = 'TEXT_EDITOR'
+            area.spaces.active.text = text_block
+            break

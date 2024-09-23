@@ -1,0 +1,27 @@
+Head - circle
+Neck_01 - circle
+Neck_02 - circle
+neckHead - paddle (rounded)
+Clavicle - clavicle
+Spine_3 - chest
+Spine_2 - torso
+Spine_1 - torso
+Pelvis - tile
+hipTwist - saddle
+backCTRL - paddle (rounded)
+Humerus_FK - FK limb 1
+Forearm_FK - FK limb 1
+Elbow pole - sphere
+Hand_IK - plane (rounded)
+Hand_fk - plane
+Finger_1 - plane
+Finger rotation - roll 2
+Fingers - fk limb 1
+Knee pole - sphere
+Root - root 2
+footRollCTRL - gear simple
+Footik - plane rounded
+Toeik - plane
+Toe rotation - roll 3
+Toes - fk limb 1
+Tibia_FK - FK limb 2
