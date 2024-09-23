@@ -1072,6 +1072,9 @@ r = Rigging_Functions()
 
 rig = 'Female Transfer Rig'
 
+r.set_mode('OBJECT')
+r.object_selection(rig)
+
 ################################
 ######### ARM ################
 

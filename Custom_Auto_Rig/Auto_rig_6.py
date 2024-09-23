@@ -171,7 +171,7 @@ ctrls_list = [
     {'Head': ['head', 'neck_2', 'neck_1']},
     {'Head CTRL': 'neckHead'},
     {'L clavicle': 'clavicle_L'},
-    {'R clacicle': 'clavicle_R'},
+    {'R clavicle': 'clavicle_R'},
     {'Breast/Pecs': ['breast_L', 'breast_R']},
     {'L arm IK': ['elbowPole_L', 'hand_IK_L']},
     {'R arm IK': ['elbowPole_R', 'hand_IK_R']},

@@ -1071,22 +1071,6 @@ sys.path.insert(0, module_dir)
 # initialize the class
 r = Rigging_Functions()
 
-def deform_bones(rig_name, rig_class, deform_list):
-    r = rig_class
-    r.set_mode('OBJECT')
-    r.remove_object_selection()
-    r.object_selection(rig_name)
-    r.set_mode('EDIT')
-    arm = bpy.data.armatures[rig_name]
-    bone_list = r.rig_bone_list(rig_name)
-
-    for item in bone_list:
-        bone = arm.edit_bones[item]
-        if item in deform_list:
-            bone.use_deform = True
-        else:
-            bone.use_deform = False
-
 ###### Cleaning ######
 
 rig = 'Female Transfer Rig'
@@ -1217,7 +1201,22 @@ IK = ['humerus_IK_L', 'humerus_IK_R', 'elbowPole_L', 'elbowPole_R', 'forearm_IK_
 RBF = ['clavicle_MCH_L', 'clavicle_MCH_R', 'RBF_Upperarm_L', 'RBF_Upperarm_R', 'RBF_leg_L', 'RBF_leg_R']
 bones_to_assign = {'Deform': deform_list, 'CTRL': CTRL, 'ACCESSORY': ACCESSORY, 'FK': FK, 'IK': IK, 'RBF': RBF}
 
-deform_bones(rig, r, deform_list)
+def deform_bones(rig_name):
+    r.set_mode('OBJECT')
+    r.remove_object_selection()
+    r.object_selection(rig_name)
+    r.set_mode('EDIT')
+    arm = bpy.data.armatures[rig_name]
+    bone_list = r.rig_bone_list(rig_name)
+
+    for item in bone_list:
+        bone = arm.edit_bones[item]
+        if item in deform_list:
+            bone.use_deform = True
+        else:
+            bone.use_deform = False
+
+deform_bones(rig)
 r.create_bone_collections(rig, bones_to_assign)
 
 
@@ -1229,7 +1228,7 @@ ctrls_list = [
     {'Head': ['head', 'neck_2', 'neck_1']},
     {'Head CTRL': 'neckHead'},
     {'L clavicle': 'clavicle_L'},
-    {'R clacicle': 'clavicle_R'},
+    {'R clavicle': 'clavicle_R'},
     {'Breast/Pecs': ['breast_L', 'breast_R']},
     {'L arm IK': ['elbowPole_L', 'hand_IK_L']},
     {'R arm IK': ['elbowPole_R', 'hand_IK_R']},
